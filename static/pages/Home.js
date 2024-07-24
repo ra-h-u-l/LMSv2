@@ -2,7 +2,7 @@ const Home = {
     template: `
         <div>
             <Navbar/>
-            <h1>This is Home</h1>
+            <h1>Library Management System</h1>
         </div>
     `
 }

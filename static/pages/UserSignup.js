@@ -1,3 +1,5 @@
+import router from "./../utils/router.js";
+
 const UserSignup = {
     template: `
         <div>

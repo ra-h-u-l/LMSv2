@@ -16,7 +16,7 @@ const AdminLogin = {
                         <label for="exampleInputPassword1">Password</label>
                         <input v-model="password" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
                     </div>
-                    <button @click="adminLogin" type="submit" class="btn btn-primary">Login</button>
+                    <button @click="adminLogin()" type="submit" class="btn btn-primary">Login</button>
                 </form>
             </div>
         </div>
@@ -32,7 +32,7 @@ const AdminLogin = {
     methods : {
         async adminLogin() {
             const url = window.location.origin
-            const response = await fetch(url + "/admindashboard", {
+            const response = await fetch(url + "/adminLogin", {
                 method : "POST",
                 headers : {
                     "Content-Type" : "application/json"
