@@ -11,6 +11,7 @@ def create_data(user_datastore):
     # create user data
     if not user_datastore.find_user(email="admin@gmail.com"):
         user_datastore.create_user(
+                                    fullName="Admin Name",
                                     email="admin@gmail.com",
                                     password=hash_password("123"),
                                     type="admin",
@@ -20,8 +21,9 @@ def create_data(user_datastore):
 
     if not user_datastore.find_user(email="user1@gmail.com"):
         user_datastore.create_user(
+                                    fullName="Rahul Kumar",
                                     email="user1@gmail.com",
-                                    password=hash_password("user123"),
+                                    password=hash_password("123"),
                                     type="user",
                                     active=True,
                                     roles=["user"]

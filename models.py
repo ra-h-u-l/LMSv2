@@ -10,6 +10,7 @@ fsq.FsModels.set_db_info(db)
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer(), primary_key = True)
+    fullName = db.Column(db.String(50), nullable = False)
     email = db.Column(db.String(50), nullable = False, unique = True)
     password = db.Column(db.String(50), nullable = False)
     active = db.Column(db.Boolean(), default = True)
