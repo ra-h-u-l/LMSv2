@@ -3,5 +3,9 @@
 }
 
 body{
-    background-color: linear-gradient(to right, yellow, blue);
+    background-image: linear-gradient(to right, lightgrey, lightblue);
+}
+
+nav{
+    background-color: lightyellow;
 }

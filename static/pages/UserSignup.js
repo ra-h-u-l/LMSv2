@@ -21,6 +21,7 @@ const UserSignup = {
                     </div>
                     <button @click="signupData()" type="submit" class="btn btn-primary">Signup</button>
                 </form>
+                <div v-if="flashMessage">{{flashMessage}}</div>
             </div>
         </div>
     `,
@@ -29,7 +30,8 @@ const UserSignup = {
         return {
             fullName : "",
             email : "",
-            password : ""
+            password : "",
+            flashMessage : ""
         }
     },
 
@@ -54,7 +56,12 @@ const UserSignup = {
             if(res.ok){
                 const data = await res.json();
                 console.log(data);
-                router.push("/userlogin");
+                this.flashMessage = "Signup successful";
+                setTimeout(() => {
+                    this.flashMessage = null;
+                    router.push("/userlogin");
+                }, 3000)
+
             }else{
                 const errorData = await res.json();
                 console.log("Signup failed: ",errorData);

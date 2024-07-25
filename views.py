@@ -1,7 +1,7 @@
 from flask import render_template_string, render_template, jsonify, request
-from flask_security import auth_required, current_user, roles_required, SQLAlchemyUserDatastore
+from flask_security import auth_required, current_user, roles_required, roles_accepted, SQLAlchemyUserDatastore
 from extensions import db, security
-from flask_security.utils import hash_password
+from flask_security.utils import hash_password, verify_password
 from models import User, Role
 
 userDatastore = SQLAlchemyUserDatastore(db, User, Role)
@@ -58,10 +58,7 @@ def create_views(app):
         else:
             return jsonify({"error": "Icorrect password"}), 401
 
-    @app.route("/userDashboard")
-    @auth_required("session", "token")
+    @app.route("/userdashboard")
+    # @auth_required("session", "token")
     def userDashboard():
-        return render_template_string("""
-        <h1> This is user dashboard </h1>
-        <a href="/logout">Logout</a>
-        """)
+        return jsonify({"message": "User Dashboard"}), 200

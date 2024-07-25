@@ -2,6 +2,7 @@ import Home from "./../pages/Home.js";
 import AdminLogin from "./../pages/AdminLogin.js";
 import UserLogin from "./../pages/UserLogin.js";
 import UserSignup from "./../pages/UserSignup.js";
+import UserDashboard from "./../pages/UserDashboard.js";
 
 
 const routes = [
@@ -10,7 +11,7 @@ const routes = [
     {path: "/userlogin", component : UserLogin},
     {path: "/usersignup", component : UserSignup},
     // {path: "/admindashboard", component : AdminDashboard},
-    // {path: "/userdashboard", component : UserDashboard},
+    {path: "/userdashboard", component : UserDashboard},
 ]
 
 const router = new VueRouter({

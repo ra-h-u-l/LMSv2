@@ -32,7 +32,7 @@ const AdminLogin = {
     methods : {
         async adminLogin() {
             const url = window.location.origin
-            const response = await fetch(url + "/adminLogin", {
+            const response = await fetch(url + "/adminlogin", {
                 method : "POST",
                 headers : {
                     "Content-Type" : "application/json"
