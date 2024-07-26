@@ -22,6 +22,10 @@ const AdminLogin = {
         </div>
     `,
 
+    components : {
+        Navbar
+    },
+
     data() {
         return {
             email : "",
@@ -43,8 +47,10 @@ const AdminLogin = {
                 })
             });
             if(response.ok) {
-                // router.push("/admindashboard");
-                console.log("admin login");
+                router.push("/admindashboard");
+                console.log("Admin logged in successfully");
+            }else{
+                console.log("Admin login failed");
             }
 
         }

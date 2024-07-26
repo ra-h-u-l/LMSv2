@@ -1,4 +1,5 @@
 import router from "./../utils/router.js";
+import Navbar from "./../components/Navbar.js";
 
 const UserSignup = {
     template: `
@@ -25,6 +26,9 @@ const UserSignup = {
             </div>
         </div>
     `,
+    components : {
+        Navbar
+    },
 
     data() {
         return {

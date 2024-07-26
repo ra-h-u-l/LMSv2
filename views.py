@@ -12,6 +12,25 @@ def create_views(app):
     def home():
         return render_template("index.html")
 
+    # admin login
+    @app.route("/adminlogin", methods=["POST"])
+    def adminlogin():
+        data = request.get_json()
+        email = data.get("email")
+        password = data.get("password")
+
+        if not email or not password:
+            return jsonify({"error": "Please provide all required fields"}), 400
+
+        admin = userDatastore.find_user(email=email)
+        if not admin:
+            return jsonify({"error": "Invalid email or password"}), 401
+
+        if verify_password(password, admin.password):
+            return jsonify({"message": "Login successful"}), 200
+        else:
+            return jsonify({"error": "Icorrect password"}), 401
+
     # user signup
     @app.route("/usersignup", methods=["POST"])
     def usersignup():
