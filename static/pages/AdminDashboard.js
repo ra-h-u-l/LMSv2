@@ -10,6 +10,19 @@ const AdminDashboard = {
     // router,
     components : {
         AdminNavbar
+    },
+    data(){
+        return{
+            
+        }
+    },
+
+    methods : {
+        
+    },
+
+    async mounted(){
+        
     }
 };
 

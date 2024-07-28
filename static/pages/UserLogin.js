@@ -49,6 +49,16 @@ const UserLogin = {
             });
 
             if(res.ok){
+                const data = await res.json();
+
+                sessionStorage.setItem("token", data.token);
+                sessionStorage.setItem("role", data.role);
+                sessionStorage.setItem("fullName", data.fullName);
+                sessionStorage.setItem("id", data.id);
+                sessionStorage.setItem("email", data.email);
+
+                // console.log(sessionStorage.getItem("token"));
+
                 router.push("/userdashboard");
             }else{
                 console.log("Login failed");

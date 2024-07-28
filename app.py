@@ -5,9 +5,15 @@ import create_initial_data
 
 def create_app():
     app = Flask(__name__)
+
     app.config["SECRET_KEY"] = "secret_key_not_to_be_exposed"
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
     app.config["SECURITY_PASSWORD_SALT"] = "password_salt_not_to_be_exposed"
+
+    # token based authentication configuration
+    app.config["SECURITY_TOKEN_AUTHENTICATION_HEADER"] = "Authentication-Token"
+    app.config["SECURITY_TOKEN_MAX_AGE"] = 20          # in seconds
+    app.config["SECURITY_LOGIN_WITHOUT_CONFIRMATION"] = True
     
     db.init_app(app)
 

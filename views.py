@@ -27,7 +27,11 @@ def create_views(app):
             return jsonify({"error": "Invalid email or password"}), 401
 
         if verify_password(password, admin.password):
-            return jsonify({"message": "Login successful"}), 200
+            return jsonify({"token" : admin.get_auth_token(),
+                            "role" : admin.roles[0].name,
+                            "fullName" : admin.fullName,
+                            "id" : admin.id,
+                            "email" : admin.email}), 200
         else:
             return jsonify({"error": "Icorrect password"}), 401
 
@@ -73,11 +77,17 @@ def create_views(app):
             return jsonify({"error": "Invalid email or password"}), 401
 
         if verify_password(password, user.password):
-            return jsonify({"message": "Login successful"}), 200
+            return jsonify({"token" : user.get_auth_token(),
+                            "role" : user.roles[0].name,
+                            "fullName" : user.fullName,
+                            "id" : user.id,
+                            "email" : user.email}), 200
         else:
             return jsonify({"error": "Icorrect password"}), 401
 
+
+    # user dashboard
     @app.route("/userdashboard")
-    # @auth_required("session", "token")
+    # @auth_required("token")
     def userDashboard():
         return jsonify({"message": "User Dashboard"}), 200
