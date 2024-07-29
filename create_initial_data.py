@@ -20,7 +20,7 @@ def create_data(user_datastore):
 
     if not user_datastore.find_user(email="user1@gmail.com"):
         user_datastore.create_user(
-            fullName="Rahul Kumar",
+            fullName="Ravi Kumar",
             email="user1@gmail.com",
             password=hash_password("123"),
             active=True,
