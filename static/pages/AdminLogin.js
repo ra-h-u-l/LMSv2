@@ -1,5 +1,6 @@
 import router from "./../utils/router.js";
 import Navbar from "./../components/Navbar.js";
+import store from "../utils/store.js";
 
 const AdminLogin = {
     template: `
@@ -49,16 +50,13 @@ const AdminLogin = {
             if(response.ok) {
                 const data = await response.json();
 
-                sessionStorage.setItem("token", data.token);
-                sessionStorage.setItem("role", data.role);
-                sessionStorage.setItem("fullName", data.fullName);
-                sessionStorage.setItem("id", data.id);
-                sessionStorage.setItem("email", data.email);
-
-                // console.log(sessionStorage.getItem("token"));
+                // store data in vuex
+                store.dispatch("login", data);
+                // console.log(store.getters.getLoginData);
 
                 router.push("/admindashboard");
                 console.log("Admin logged in successfully");
+
             }else{
                 console.log("Admin login failed");
             }

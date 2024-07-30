@@ -16,14 +16,16 @@ const store = new Vuex.Store({
             state.role = loginData.role;
             state.token = loginData.token;
             state.isLoggedIn = true;
+            sessionStorage.setItem('store', JSON.stringify(state));
         },
-        clearAdmin(state) {
+        clearLoginData(state) {
             state.email = "";
             state.fullName = "";
             state.id = "";
             state.role = "";
             state.token = "";
             state.isLoggedIn = false;
+            sessionStorage.setItem('store', JSON.stringify(state));
         },
     },
 
@@ -49,5 +51,11 @@ const store = new Vuex.Store({
         
     }
 });
+
+// Load state from sessionStorage
+const savedState = sessionStorage.getItem('store');
+if (savedState) {
+    store.replaceState(Object.assign(store.state, JSON.parse(savedState)));
+}
 
 export default store;

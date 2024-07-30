@@ -14,7 +14,7 @@ def create_views(app):
 
     # admin login
     @app.route("/adminlogin", methods=["POST"])
-    def adminlogin():
+    def adminLogin():
         data = request.get_json()
         email = data.get("email")
         password = data.get("password")
@@ -27,17 +27,26 @@ def create_views(app):
             return jsonify({"error": "Invalid email or password"}), 401
 
         if verify_password(password, admin.password):
-            return jsonify({"token" : admin.get_auth_token(),
-                            "role" : admin.roles[0].name,
+            return jsonify({"email" : admin.email,
                             "fullName" : admin.fullName,
                             "id" : admin.id,
-                            "email" : admin.email}), 200
+                            "role" : admin.roles[0].name,
+                            "token" : admin.get_auth_token()
+                            }), 200
         else:
             return jsonify({"error": "Icorrect password"}), 401
 
+    # admin dashboard
+    @app.route("/admindashboard", methods=["GET", "POST"])
+    @auth_required("token")
+    @roles_required("admin")
+    def adminDashboard():
+        return jsonify({"message": "Admin Dashboard"}), 200
+
+
     # user signup
     @app.route("/usersignup", methods=["POST"])
-    def usersignup():
+    def userSignup():
         data = request.get_json()
         fullName = data.get("fullName")
         email = data.get("email")
@@ -64,7 +73,7 @@ def create_views(app):
 
     # user login
     @app.route("/userlogin", methods=["POST"])
-    def userlogin():
+    def userLogin():
         data = request.get_json()
         email = data.get("email")
         password = data.get("password")
@@ -77,17 +86,19 @@ def create_views(app):
             return jsonify({"error": "Invalid email or password"}), 401
 
         if verify_password(password, user.password):
-            return jsonify({"token" : user.get_auth_token(),
-                            "role" : user.roles[0].name,
+            return jsonify({"email" : user.email,
                             "fullName" : user.fullName,
                             "id" : user.id,
-                            "email" : user.email}), 200
+                            "role" : user.roles[0].name,
+                            "token" : user.get_auth_token()
+                            }), 200
         else:
             return jsonify({"error": "Icorrect password"}), 401
 
 
     # user dashboard
-    @app.route("/userdashboard")
-    # @auth_required("token")
+    @app.route("/userdashboard", methods=["GET", "POST"])
+    @auth_required("token")
+    @roles_required("user")
     def userDashboard():
         return jsonify({"message": "User Dashboard"}), 200
