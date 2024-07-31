@@ -16,6 +16,7 @@ class User(db.Model, UserMixin):
     active = db.Column(db.Boolean(), default = True)
     type = db.Column(db.String(), default="user")
     fs_uniquifier = db.Column(db.String(), nullable = False, unique = True)
+    # Relationship
     roles = db.relationship("Role", secondary = "user_roles")
 
 
@@ -40,7 +41,8 @@ class Sections(db.Model):
     date_created = db.Column(db.DateTime(), default = datetime.now)
     last_updated = db.Column(db.DateTime(), default = datetime.now)
     description = db.Column(db.String(200))
-    # books = db.relationship("Books", backref="section", cascade="all, delete-orphan, save-update")
+    # Relationship
+    books = db.relationship("Books", backref="section")
 
 
 # 5  -----------------------> books <-------------------

@@ -2,6 +2,7 @@ from flask import Flask
 import views
 from extensions import db, security
 import create_initial_data
+import resources
 
 def create_app():
     app = Flask(__name__)
@@ -12,7 +13,7 @@ def create_app():
 
     # token based authentication configuration
     app.config["SECURITY_TOKEN_AUTHENTICATION_HEADER"] = "Authentication-Token"
-    app.config["SECURITY_TOKEN_MAX_AGE"] = 20          # in seconds
+    app.config["SECURITY_TOKEN_MAX_AGE"] = 3600          # in seconds
     app.config["SECURITY_LOGIN_WITHOUT_CONFIRMATION"] = True
     
     db.init_app(app)
@@ -31,6 +32,8 @@ def create_app():
     app.config['SECURITY_CSRF_IGNORE_UNAUTH_ENDPOINTS'] = True
 
     views.create_views(app)
+
+    resources.api.init_app(app)
 
     return app
 
