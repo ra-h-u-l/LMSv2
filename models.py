@@ -42,7 +42,7 @@ class Sections(db.Model):
     last_updated = db.Column(db.DateTime(), default = datetime.now)
     description = db.Column(db.String(200))
     # Relationship
-    books = db.relationship("Books", backref="section")
+    books = db.relationship("Books", backref="section", lazy=True)
 
 
 # 5  -----------------------> books <-------------------
