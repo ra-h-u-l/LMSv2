@@ -1,3 +1,7 @@
+import router from "./../utils/router.js";
+import store from "./../utils/store.js";
+
+
 const AdminNavbar = {
     template: `
         <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -12,7 +16,7 @@ const AdminNavbar = {
                             <router-link class="nav-link active" to="/">Admin Dashboard</router-link>
                         </li>    
                         <li class="nav-item">
-                            <router-link class="nav-link active" to="/">All Sections</router-link>
+                            <router-link class="nav-link active" to="/adminallsections">All Sections</router-link>
                         </li>
                         <li class="nav-item">
                             <router-link class="nav-link active" to="/">All Books</router-link>
@@ -34,11 +38,18 @@ const AdminNavbar = {
                         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                         <button class="btn btn-outline-success" type="submit">Search</button>
                     </form>
-                    <button class="btn btn-outline-success" type="submit">Logout</button>
+                    <button @click="adminLogout()" class="btn btn-outline-danger" type="submit">Logout</button>
                 </div>
             </div>
         </nav>
         `,
+
+    methods : {
+        adminLogout() {
+            store.dispatch("logout");
+            router.push("/adminlogin");
+        }
+    }
 
 }
 

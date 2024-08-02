@@ -1,3 +1,6 @@
+import router from "./../utils/router.js";
+import store from "./../utils/store.js";
+
 const UserNavbar = {
     template: `
         <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -28,11 +31,18 @@ const UserNavbar = {
                         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                         <button class="btn btn-outline-success" type="submit">Search</button>
                     </form>
-                    <button class="btn btn-outline-success" type="submit">Logout</button>
+                    <button @click="userLogout()" class="btn btn-outline-danger" type="submit">Logout</button>
                 </div>
             </div>
         </nav>
         `,
+
+    methods : {
+        userLogout() {
+            store.dispatch("logout");
+            router.push("/userlogin");
+        }
+    }
 
 }
 
