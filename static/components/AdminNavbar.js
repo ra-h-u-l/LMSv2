@@ -13,19 +13,19 @@ const AdminNavbar = {
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <router-link class="nav-link active" to="/">Admin Dashboard</router-link>
+                            <router-link class="nav-link active" to="/admindashboard">Admin Dashboard</router-link>
                         </li>    
                         <li class="nav-item">
                             <router-link class="nav-link active" to="/adminallsections">All Sections</router-link>
                         </li>
                         <li class="nav-item">
-                            <router-link class="nav-link active" to="/">All Books</router-link>
+                            <router-link class="nav-link active" to="/adminallbooks">All Books</router-link>
                         </li>
                         <li class="nav-item">
                             <router-link class="nav-link active" to="/">Stats</router-link>
                         </li>
                         <li class="nav-item">
-                            <router-link class="nav-link active" to="/">Add Section</router-link>
+                            <router-link class="nav-link active" to="/admincreatesection">Add Section</router-link>
                         </li>
                         <li class="nav-item">
                             <router-link class="nav-link active" to="/">Add Book</router-link>
@@ -47,7 +47,7 @@ const AdminNavbar = {
     methods : {
         adminLogout() {
             store.dispatch("logout");
-            router.push("/adminlogin");
+            router.push("/");
         }
     }
 

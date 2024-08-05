@@ -40,7 +40,7 @@ const UserNavbar = {
     methods : {
         userLogout() {
             store.dispatch("logout");
-            router.push("/userlogin");
+            router.push("/");
         }
     }
 

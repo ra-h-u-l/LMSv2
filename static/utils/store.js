@@ -5,7 +5,11 @@ const store = new Vuex.Store({
         id : "",
         role : "",
         token : "",
-        isLoggedIn : false
+        isLoggedIn : false,
+        // For Section
+        section_id : null,
+        section_name : "",
+        section_description : "",
     },
 
     mutations : {
