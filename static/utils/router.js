@@ -7,6 +7,8 @@ import AdminAllSections from "./../pages/AdminAllSections.js";
 import AdminCreateSection from "./../pages/AdminCreateSection.js";
 import AdminUpdateSection from "./../pages/AdminUpdateSection.js";
 import AdminAllBooks from "./../pages/AdminAllBooks.js";
+import AdminCreateBook from "./../pages/AdminCreateBook.js";
+import AdminUpdateBook from "./../pages/AdminUpdateBook.js";
 // Pages (User) ================================================================
 import UserSignup from "./../pages/UserSignup.js";
 import UserLogin from "./../pages/UserLogin.js";
@@ -23,6 +25,8 @@ const routes = [
     {path: "/admincreatesection", component : AdminCreateSection},
     {path: "/adminupdatesection", component : AdminUpdateSection},
     {path: "/adminallbooks", component : AdminAllBooks},
+    {path: "/admincreatebook", component : AdminCreateBook},
+    {path: "/adminupdatebook", component : AdminUpdateBook},
     // User Pages =================================================================
     {path: "/usersignup", component : UserSignup},
     {path: "/userlogin", component : UserLogin},

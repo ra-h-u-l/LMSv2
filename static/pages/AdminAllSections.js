@@ -77,7 +77,7 @@ const AdminAllSections = {
                 window.location.reload();
             }
 
-            if(response.status === 400){
+            if(response.status === 404){
                 const data = await response.json();
                 console.log(data);
                 alert(data.message);

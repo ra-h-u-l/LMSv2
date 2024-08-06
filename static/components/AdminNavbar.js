@@ -28,7 +28,7 @@ const AdminNavbar = {
                             <router-link class="nav-link active" to="/admincreatesection">Add Section</router-link>
                         </li>
                         <li class="nav-item">
-                            <router-link class="nav-link active" to="/">Add Book</router-link>
+                            <router-link class="nav-link active" to="/admincreatebook">Add Book</router-link>
                         </li>
                         <li class="nav-item">
                             <router-link class="nav-link active" to="/">Book Issue History</router-link>

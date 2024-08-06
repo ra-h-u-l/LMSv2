@@ -16,7 +16,7 @@ const AdminUpdateSection = {
                         <label for="section-description">Section Description</label>
                         <input v-model="sectionDescription" type="text" class="form-control" id="section-description" placeholder=sectionDescription>
                     </div>
-                    <button @click="updateSection()" type="submit" class="btn btn-primary">Add</button>
+                    <button @click="updateSection()" type="submit" class="btn btn-primary">Update</button>
                 </form>
         </div>
     `,

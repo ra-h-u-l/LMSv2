@@ -65,48 +65,47 @@ const AdminAllBooks = {
     },
 
     methods : {
-        // updateSection(sec){
-        //     store.state.section_id = sec.section_id;
-        //     store.state.section_name = sec.section_name;
-        //     store.state.section_description = sec.description;
-        //     // console.log(sec);
-        //     // console.log(store.state);
-        //     router.push("/adminupdatesection");
-        // },
+        updateBook(book){
+            store.state.book_id = book.book_id;
+            store.state.book_name = book.book_name;
+            store.state.book_description = book.description;
+            store.state.section_id1 = book.section_id;
+            store.state.content = book.content;
+            store.state.authors = book.authors;
+            store.state.total_copies = book.total_copies;
+            store.state.book_price = book.book_price;
+            // console.log(sec);
+            // console.log(store.state);
+            router.push("/adminupdatebook");
+        },
 
-        // async deleteSection(sec){
-        //     const token = store.getters.getLoginData.token;
-        //     const response = await fetch(window.location.origin + "/api/sections", {
-        //         method : "DELETE",
-        //         headers : {
-        //             "Content-Type" : "application/json",
-        //             "Authentication-Token" : token
-        //         },
-        //         body : JSON.stringify({
-        //             id : sec.section_id
-        //         })
-        //     });
+        async deleteBook(book){
+            const token = store.getters.getLoginData.token;
+            const response = await fetch(window.location.origin + "/api/books", {
+                method : "DELETE",
+                headers : {
+                    "Content-Type" : "application/json",
+                    "Authentication-Token" : token
+                },
+                body : JSON.stringify({
+                    id : book.book_id
+                })
+            });
 
-        //     if(response.status === 200){
-        //         const data = await response.json();
-        //         console.log(data);
-        //         window.location.reload();
-        //     }
+            if(response.status === 200){
+                const data = await response.json();
+                console.log(data);
+                window.location.reload();
+            }
 
-        //     if(response.status === 400){
-        //         const data = await response.json();
-        //         console.log(data);
-        //         alert(data.message);
-        //     }
+            if(response.status === 400){
+                const data = await response.json();
+                console.log(data);
+                alert(data.message);
+            }
 
-        //     if(response.status === 400){
-        //         const data = await response.json();
-        //         console.log(data);
-        //         alert(data.message);
-        //         window.location.reload();
-        //     }
 
-        // }
+        }
         
     },
 

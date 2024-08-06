@@ -10,6 +10,15 @@ const store = new Vuex.Store({
         section_id : null,
         section_name : "",
         section_description : "",
+        // For Book
+        book_id : null,
+        book_name : "",
+        book_description : "",
+        section_id1 : null,
+        content : "",
+        authors : "",
+        total_copies : null,
+        book_price : null,
     },
 
     mutations : {
