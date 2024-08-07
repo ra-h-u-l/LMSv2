@@ -2,7 +2,7 @@ import AdminNavbar from "../components/AdminNavbar.js";
 import store from "../utils/store.js";
 import router from "../utils/router.js";
 
-const AdminAllBooks = {
+const AdminParticularSectionBooks = {
     template : `
         <div>
             <AdminNavbar/>
@@ -31,10 +31,10 @@ const AdminAllBooks = {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(book, index) in allBooks">
+                            <tr v-for="(book, index) in sectionBooks">
                                 <th scope="row">{{index + 1}}</th>
-                                <td >{{book.book_name}}</td>
-                                <td ><button @click="viewSection(book.section_id)" style="background-color: transparent; border: none;">{{book.section_name}}</button></td>
+                                <td >{{book["book_name"]}}</td>
+                                <td >{{book.section_name}}</td>
                                 <td>{{book.description}}</td>
                                 <td>{{book.date_created}}</td>
                                 <td>{{book.last_updated}}</td>
@@ -62,16 +62,11 @@ const AdminAllBooks = {
 
     data(){
         return{
-            allBooks : null,
+            sectionBooks : []
         }
     },
 
     methods : {
-        viewSection(section_id){
-            sessionStorage.setItem('section_id', section_id);
-            router.push("/adminparticularsectionbooks");
-        },
-
         readBook(book){
             sessionStorage.setItem('book_name', book.book_name);
             sessionStorage.setItem('authors', book.authors);
@@ -125,22 +120,33 @@ const AdminAllBooks = {
 
     async mounted(){
         const token = store.getters.getLoginData.token;
+        const sid = sessionStorage.getItem('section_id');
 
-        const response = await fetch(window.location.origin + "/api/books", {
-            method : "GET",
+        const response = await fetch(window.location.origin + "/sectionbooks", {
+            method : "POST",
             headers : {
+                "Content-Type" : "application/json",
                 "Authentication-Token" : token
-            }
+            },
+            body : JSON.stringify({
+                section_id : sid
+            })
         });
 
         if(response.status === 200){
-            const data = await response.json();
-            this.allBooks = data;
-            console.log(data);
+            const bookList = await response.json();
+            this.sectionBooks = bookList;
+            console.log(bookList);
         }
     },
+
+    beforeDestroy(){
+        sessionStorage.removeItem('section_id');
+    },
+    
+
 
 
 };
 
-export default AdminAllBooks;
+export default AdminParticularSectionBooks;

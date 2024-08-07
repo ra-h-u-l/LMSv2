@@ -9,6 +9,8 @@ import AdminUpdateSection from "./../pages/AdminUpdateSection.js";
 import AdminAllBooks from "./../pages/AdminAllBooks.js";
 import AdminCreateBook from "./../pages/AdminCreateBook.js";
 import AdminUpdateBook from "./../pages/AdminUpdateBook.js";
+import AdminReadBook from "./../pages/AdminReadBook.js";
+import AdminParticularSectionBooks from "./../pages/AdminParticularSectionBooks.js";
 // Pages (User) ================================================================
 import UserSignup from "./../pages/UserSignup.js";
 import UserLogin from "./../pages/UserLogin.js";
@@ -27,6 +29,8 @@ const routes = [
     {path: "/adminallbooks", component : AdminAllBooks},
     {path: "/admincreatebook", component : AdminCreateBook},
     {path: "/adminupdatebook", component : AdminUpdateBook},
+    {path: "/adminreadbook", component : AdminReadBook},
+    {path: "/adminparticularsectionbooks", component : AdminParticularSectionBooks},
     // User Pages =================================================================
     {path: "/usersignup", component : UserSignup},
     {path: "/userlogin", component : UserLogin},

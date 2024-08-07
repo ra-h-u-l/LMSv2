@@ -2,7 +2,8 @@ from flask import render_template_string, render_template, jsonify, request
 from flask_security import auth_required, current_user, roles_required, roles_accepted, SQLAlchemyUserDatastore
 from extensions import db, security
 from flask_security.utils import hash_password, verify_password
-from models import User, Role
+# from models import User, Role
+from models import *
 
 userDatastore = SQLAlchemyUserDatastore(db, User, Role)
 
@@ -42,6 +43,41 @@ def create_views(app):
     @roles_required("admin")
     def adminDashboard():
         return jsonify({"message": "Admin Dashboard"}), 200
+
+    # particular section books
+    @app.route("/sectionbooks", methods=["POST"])
+    @auth_required("token")
+    @roles_accepted("admin", "user")
+    def particularSectionBooks():
+        data = request.get_json()
+        section_id = data.get("section_id")
+
+        if not section_id:
+            return jsonify({"error": "Please provide all required fields"}), 400
+
+        books = Books.query.filter_by(section_id=section_id).all()
+
+        book_data = []
+        for book in books:
+            book_info = {}
+            book_info["book_id"] = book.book_id
+            book_info["book_name"] = book.book_name
+            book_info["section_id"] = book.section.section_id
+            book_info["section_name"] = book.section.section_name
+            book_info["date_created"] = f"{book.date_created.strftime('%d')}-{book.date_created.strftime('%b')}-{book.date_created.strftime('%Y')}"
+            book_info["last_updated"] = f"{book.last_updated.strftime('%d')}-{book.last_updated.strftime('%b')}-{book.last_updated.strftime('%Y')}"
+            book_info["description"] = book.description
+            book_info["content"] = book.content
+            book_info["authors"] = book.authors
+            book_info["total_copies"] = book.total_copies
+            book_info["available_copies"] = book.available_copies
+            book_info["issued_copies"] = book.issued_copies
+            book_info["sold_copies"] = book.sold_copies
+            book_info["book_price"] = book.book_price
+            book_info["rating"] = book.rating
+            book_data.append(book_info)
+
+        return book_data, 200
 
 
     # user signup

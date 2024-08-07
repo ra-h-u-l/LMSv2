@@ -15,6 +15,7 @@ const AdminAllSections = {
                                 <th scope="col">S. No.</th>
                                 <th scope="col">Section Name</th>
                                 <th scope="col">Description</th>
+                                <th scope="col">ViewBooks</th>
                                 <th scope="col">Created On</th>
                                 <th scope="col">Updated On</th>
                                 <th scope="col">Update</th>
@@ -26,6 +27,7 @@ const AdminAllSections = {
                                 <th scope="row">{{index + 1}}</th>
                                 <td >{{section.section_name}}</td>
                                 <td >{{section.description}}</td>
+                                <td><button @click="viewBooks(section.section_id)" type="button" class="btn btn-primary">View Books</button></td>
                                 <td>{{section.date_created}}</td>
                                 <td>{{section.last_updated}}</td>
                                 <td><button @click="updateSection(section)" type="button" class="btn btn-warning">Update</button></td>
@@ -49,12 +51,16 @@ const AdminAllSections = {
     },
 
     methods : {
+
+        viewBooks(section_id){
+            sessionStorage.setItem('section_id', section_id);
+            router.push("/adminparticularsectionbooks");
+        },
+
         updateSection(sec){
             store.state.section_id = sec.section_id;
             store.state.section_name = sec.section_name;
             store.state.section_description = sec.description;
-            // console.log(sec);
-            // console.log(store.state);
             router.push("/adminupdatesection");
         },
 
@@ -109,7 +115,7 @@ const AdminAllSections = {
             this.allSections = data;
             console.log(data);
         }
-    }
+    },
 
 };
 
