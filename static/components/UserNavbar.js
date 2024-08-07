@@ -12,13 +12,13 @@ const UserNavbar = {
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <router-link class="nav-link active" to="/">Your Dashboard</router-link>
+                            <router-link class="nav-link active" to="/userdashboard">Your Dashboard</router-link>
                         </li>    
                         <li class="nav-item">
-                            <router-link class="nav-link active" to="/">All Sections</router-link>
+                            <router-link class="nav-link active" to="/userallsections">All Sections</router-link>
                         </li>
                         <li class="nav-item">
-                            <router-link class="nav-link active" to="/">All Books</router-link>
+                            <router-link class="nav-link active" to="/userallbooks">All Books</router-link>
                         </li>
                         <li class="nav-item">
                             <router-link class="nav-link active" to="/">Stats</router-link>

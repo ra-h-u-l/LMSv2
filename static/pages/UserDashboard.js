@@ -6,7 +6,26 @@ const UserDashboard = {
     template : `
         <div>
             <UserNavbar/>
-            <h1>User Dashboard</h1>
+            <center>
+                <h3>Requested Books</h3>
+                <h4 v-if="!requestList">No Requests</h4>
+                <table v-if="requestList" class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Book Name</th>
+                                <th scope="col">Date of Request</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(book, index) in requestList" v-if="book.user_id == user_id">
+                                <td >&#128214;</td>
+                                <td >{{book.book_name}}</td>
+                                <td >{{book.date_requested}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+            </center>
         </div>
     `,
 
@@ -16,7 +35,8 @@ const UserDashboard = {
 
     data(){
         return{
-            
+            requestList : null,
+            user_id : store.state.id,
         }
     },
 
@@ -46,6 +66,25 @@ const UserDashboard = {
         }else{
             store.dispatch("logout");
             router.push("/userlogin");
+        }
+
+        // requestList
+        const response2 = await fetch(window.location.origin + "/userborrowbook", {
+            method : "GET",
+            headers : {
+                "Authentication-Token" : token
+            }
+        });
+
+        if(response2.status === 200){
+            const data = await response2.json();
+            this.requestList = data;
+            console.log("List:", data);
+        }
+
+        if(response2.status === 404){
+            const data = await response2.json();
+            console.log(data);
         }
     }
 };

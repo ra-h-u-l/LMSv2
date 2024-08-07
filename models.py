@@ -96,8 +96,9 @@ class UserBookHistory(db.Model):
     book_id = db.Column(db.Integer(), nullable = False)
     user_id = db.Column(db.Integer(), db.ForeignKey("user.id"), nullable = False)
     book_name = db.Column(db.String(), nullable = False)
-    days_requested = db.Column(db.Integer(), nullable = False)
+    # days_requested = db.Column(db.Integer(), nullable = False)
     date_issued = db.Column(db.DateTime())
+    date_returned = db.Column(db.DateTime())
     date_bought = db.Column(db.DateTime())
     is_bought = db.Column(db.Boolean(), default = False)
 

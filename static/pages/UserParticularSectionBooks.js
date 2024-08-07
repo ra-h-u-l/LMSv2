@@ -1,11 +1,11 @@
-import AdminNavbar from "../components/AdminNavbar.js";
+import UserNavbar from "../components/UserNavbar.js";
 import store from "../utils/store.js";
 import router from "../utils/router.js";
 
-const AdminParticularSectionBooks = {
+const UserParticularSectionBooks = {
     template : `
         <div>
-            <AdminNavbar/>
+            <UserNavbar/>
             <center>
                 <h3>All Books</h3>
                 <div>
@@ -19,15 +19,10 @@ const AdminParticularSectionBooks = {
                                 <th scope="col">Created On</th>
                                 <th scope="col">Updated On</th>
                                 <th scope="col">Authors</th>
-                                <th scope="col">Total Copies</th>
                                 <th scope="col">Available Copies</th>
-                                <th scope="col">Issued Copies</th>
-                                <th scope="col">Sold Copies</th>
                                 <th scope="col">Price</th>
                                 <th scope="col">Rating</th>
-                                <th scope="col">Read Book</th>
-                                <th scope="col">Update</th>
-                                <th scope="col">Delete</th>
+                                <th scope="col">Borrow Book</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -39,15 +34,10 @@ const AdminParticularSectionBooks = {
                                 <td>{{book.date_created}}</td>
                                 <td>{{book.last_updated}}</td>
                                 <td>{{book.authors}}</td>
-                                <td>{{book.total_copies}}</td>
                                 <td>{{book.available_copies}}</td>
-                                <td>{{book.issued_copies}}</td>
-                                <td>{{book.sold_copies}}</td>
                                 <td>₹ {{book.book_price}}</td>
                                 <td>{{book.rating}}</td>
-                                <td><button @click="readBook(book)" type="button" class="btn btn-primary">Read</button></td>
-                                <td><button @click="updateBook(book)" type="button" class="btn btn-warning">Update</button></td>
-                                <td><button @click="deleteBook(book)" type="button" class="btn btn-danger">Delete</button></td>
+                                <td><button @click="borrowRequest(book)" type="button" class="btn btn-primary">Request to Borrow</button></td>
                             </tr>
                         </tbody>
                     </table>
@@ -57,64 +47,43 @@ const AdminParticularSectionBooks = {
     `,
 
     components : {
-        AdminNavbar
+        UserNavbar
     },
 
     data(){
         return{
-            sectionBooks : []
+            sectionBooks : [],
         }
     },
 
     methods : {
-        readBook(book){
-            sessionStorage.setItem('book_name', book.book_name);
-            sessionStorage.setItem('authors', book.authors);
-            sessionStorage.setItem('content', book.content);
-            router.push("/adminreadbook");
-        },
 
-        updateBook(book){
-            store.state.book_id = book.book_id;
-            store.state.book_name = book.book_name;
-            store.state.book_description = book.description;
-            store.state.section_id1 = book.section_id;
-            store.state.content = book.content;
-            store.state.authors = book.authors;
-            store.state.total_copies = book.total_copies;
-            store.state.book_price = book.book_price;
-            // console.log(sec);
-            // console.log(store.state);
-            router.push("/adminupdatebook");
-        },
-
-        async deleteBook(book){
+        async borrowRequest(book){
+            const user_id = store.state.id;
             const token = store.getters.getLoginData.token;
-            const response = await fetch(window.location.origin + "/api/books", {
-                method : "DELETE",
+
+            const response = await fetch(window.location.origin + "/userborrowbook", {
+                method : "POST",
                 headers : {
-                    "Content-Type" : "application/json",
+                    "Content-Type": "application/json",
                     "Authentication-Token" : token
                 },
                 body : JSON.stringify({
-                    id : book.book_id
+                    "book_id" : book.book_id,
+                    "user_id" : user_id
                 })
             });
 
-            if(response.status === 200){
+            if(response.status === 201){
                 const data = await response.json();
-                console.log(data);
-                window.location.reload();
+                router.push("/userdashboard");
             }
 
             if(response.status === 400){
                 const data = await response.json();
-                console.log(data);
                 alert(data.message);
             }
-
-
-        }
+        },
         
     },
 
@@ -136,17 +105,14 @@ const AdminParticularSectionBooks = {
         if(response.status === 200){
             const bookList = await response.json();
             this.sectionBooks = bookList;
-            // console.log(bookList);
+            console.log(bookList);
         }
     },
 
     beforeDestroy(){
         sessionStorage.removeItem('section_id');
     },
-    
-
-
 
 };
 
-export default AdminParticularSectionBooks;
+export default UserParticularSectionBooks;

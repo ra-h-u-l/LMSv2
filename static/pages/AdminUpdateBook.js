@@ -36,7 +36,7 @@ const AdminUpdateBook = {
                         <input v-model="total_copies" type="number" class="form-control" id="book-total-copies" placeholder=total_copies required>
                     </div>
                     <div class="form-group">
-                        <label for="book-price">Book Price</label>
+                        <label for="book-price">Book Price(₹)</label>
                         <input v-model="book_price" type="number" class="form-control" id="book-price" placeholder=book_price required>
                     </div>
                     <button @click="updateBook()" type="submit" class="btn btn-primary">Update</button>

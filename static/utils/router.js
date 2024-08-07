@@ -15,6 +15,9 @@ import AdminParticularSectionBooks from "./../pages/AdminParticularSectionBooks.
 import UserSignup from "./../pages/UserSignup.js";
 import UserLogin from "./../pages/UserLogin.js";
 import UserDashboard from "./../pages/UserDashboard.js";
+import UserAllSections from "./../pages/UserAllSections.js";
+import UserParticularSectionBooks from "./../pages/UserParticularSectionBooks.js";
+import UserAllBooks from "./../pages/UserAllBooks.js";
 
 
 const routes = [
@@ -35,6 +38,9 @@ const routes = [
     {path: "/usersignup", component : UserSignup},
     {path: "/userlogin", component : UserLogin},
     {path: "/userdashboard", component : UserDashboard},
+    {path: "/userallsections", component : UserAllSections},
+    {path: "/userparticularsectionbooks", component : UserParticularSectionBooks},
+    {path: "/userallbooks", component : UserAllBooks},
 ]
 
 const router = new VueRouter({

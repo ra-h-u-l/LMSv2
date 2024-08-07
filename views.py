@@ -4,6 +4,7 @@ from extensions import db, security
 from flask_security.utils import hash_password, verify_password
 # from models import User, Role
 from models import *
+from datetime import datetime, timedelta
 
 userDatastore = SQLAlchemyUserDatastore(db, User, Role)
 
@@ -79,6 +80,29 @@ def create_views(app):
 
         return book_data, 200
 
+    # admin cancel book request
+    @app.route("/cancelbookrequest", methods=["POST"])
+    @auth_required("token")
+    @roles_required("admin")
+    def adminCancelBookRequest():
+        if request.method == "POST":
+            data = request.get_json()
+            book_id = data.get("book_id")
+            user_id = data.get("user_id")
+
+            if not book_id or not user_id:
+                return jsonify({"error": "Please provide all required fields"}), 400
+
+            book = RequestedBooks.query.filter_by(book_id=book_id, user_id=user_id).first()
+
+            if not book:
+                return jsonify({"error": "Book request not found"}), 404
+
+            db.session.delete(book)
+            db.session.commit()
+
+            return jsonify({"message": "Book request canceled successfully"}), 200
+
 
     # user signup
     @app.route("/usersignup", methods=["POST"])
@@ -138,3 +162,47 @@ def create_views(app):
     @roles_required("user")
     def userDashboard():
         return jsonify({"message": "User Dashboard"}), 200
+
+    # user borrow book
+    @app.route("/userborrowbook", methods=["GET","POST"])
+    @auth_required("token")
+    @roles_accepted("admin", "user")
+    def userBorrowBook():
+        if request.method == "GET":
+            requestedBooksList = []
+            reqBooks = RequestedBooks.query.all()
+
+            if not reqBooks:
+                return jsonify({"message": "No books requested"}), 404
+
+            for reqBook in reqBooks:
+                reqBookInfo = {}
+                reqBookInfo["book_id"] = reqBook.book_id
+                reqBookInfo["book_name"] = Books.query.get(reqBook.book_id).book_name
+                reqBookInfo["user_id"] = reqBook.user_id
+                reqBookInfo["user_name"] = User.query.get(reqBook.user_id).fullName
+                reqBookInfo["date_requested"] = f"{reqBook.date_requested.strftime('%d')}-{reqBook.date_requested.strftime('%b')}-{reqBook.date_requested.strftime('%Y')}"
+                requestedBooksList.append(reqBookInfo)
+
+            return requestedBooksList, 200
+
+        if request.method == "POST":
+            data = request.get_json()
+            available_copies = Books.query.get(data["book_id"]).available_copies
+            if available_copies == 0:
+                return jsonify({"message": "Book not available for borrowing"}), 400
+
+            if RequestedBooks.query.filter_by(book_id = data["book_id"], user_id = data["user_id"]).first():
+                return jsonify({"message": "Book already requested"}), 400
+
+            requested_books_count = RequestedBooks.query.filter_by(user_id = data["user_id"]).count()
+            issued_books_count = CurrentlyIssuedBooks.query.filter_by(user_id = data["user_id"]).count()
+            print(requested_books_count, issued_books_count)
+
+            if requested_books_count + issued_books_count >= 5:
+                return jsonify({"message": "You can't request more than 5 books"}), 400
+
+            newRequest = RequestedBooks(book_id = data["book_id"], user_id = data["user_id"])
+            db.session.add(newRequest)
+            db.session.commit()
+            return jsonify({"message": "Book requested successfully"}), 201
