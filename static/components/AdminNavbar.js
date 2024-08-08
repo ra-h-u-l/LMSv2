@@ -31,7 +31,7 @@ const AdminNavbar = {
                             <router-link class="nav-link active" to="/admincreatebook">Add Book</router-link>
                         </li>
                         <li class="nav-item">
-                            <router-link class="nav-link active" to="/">Book Issue History</router-link>
+                            <router-link class="nav-link active" to="/adminbookhistory">Book Issue History</router-link>
                         </li>
                     </ul>
                     <form class="d-flex" role="search">

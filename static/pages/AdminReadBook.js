@@ -14,7 +14,7 @@ const AdminReadBook = {
                             <p class="card-text">Authors: {{authors}}</p>
                             <p class="card-text">Book Content</p>
                             <p class="card-text"><textarea name="" id="" cols="122" rows="30">{{content}}</textarea></p>
-
+                        </div>
                     </div>
                 </center>
         </div>

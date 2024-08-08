@@ -80,6 +80,68 @@ def create_views(app):
 
         return book_data, 200
 
+    # admin grant book request
+    @app.route("/grantbook", methods=["POST"])
+    @auth_required("token")
+    @roles_required("admin")
+    def grantBook():
+        if request.method == "POST":
+            data = request.get_json()
+            book_id = data.get("book_id")
+            user_id = data.get("user_id")
+
+            if not book_id or not user_id:
+                return jsonify({"error": "Please provide all required fields"}), 400
+
+            book = RequestedBooks.query.filter_by(book_id=book_id, user_id=user_id).first()
+
+            if not book:
+                return jsonify({"error": "Book request not found"}), 404
+
+            granted_book = CurrentlyIssuedBooks(
+                book_id = book_id,
+                user_id = user_id,
+                date_requested = book.date_requested,
+                date_issued = datetime.now(),
+                days_requested = 7
+            )
+            actual_book = Books.query.get(book_id)
+            actual_book.available_copies = actual_book.available_copies - 1
+            actual_book.issued_copies = actual_book.issued_copies + 1
+
+            history_update = UserBookHistory(
+                book_id = book_id,
+                user_id = user_id,
+                book_name = actual_book.book_name,
+                date_issued = datetime.now()
+            )
+
+            db.session.add(granted_book)
+            db.session.add(history_update)
+            db.session.delete(book)
+            db.session.commit()
+
+            return jsonify({"message": "Book issued/granted successfully"}), 200
+
+    # currently issued books
+    @app.route("/currentlyissuedbooks", methods=["GET"])
+    @auth_required("token")
+    @roles_accepted("admin", "user")
+    def currentlyIssuedBooks():
+        books = CurrentlyIssuedBooks.query.all()
+        book_data = []
+        for book in books:
+            book_info = {}
+            book_info["book_id"] = book.book_id
+            book_info["book_name"] = Books.query.get(book.book_id).book_name
+            book_info["user_id"] = book.user_id
+            book_info["user_name"] = User.query.get(book.user_id).fullName
+            book_info["date_issued"] = f"{book.date_issued.strftime('%d')}-{book.date_issued.strftime('%b')}-{book.date_issued.strftime('%Y')}"
+            book_info["date_requested"] = f"{book.date_requested.strftime('%d')}-{book.date_requested.strftime('%b')}-{book.date_requested.strftime('%Y')}"
+            book_data.append(book_info)
+
+        return book_data, 200
+
     # admin cancel book request
     @app.route("/cancelbookrequest", methods=["POST"])
     @auth_required("token")
@@ -206,3 +268,133 @@ def create_views(app):
             db.session.add(newRequest)
             db.session.commit()
             return jsonify({"message": "Book requested successfully"}), 201
+
+    # user read book
+    @app.route("/userreadbook", methods=["POST"])
+    @auth_required("token")
+    @roles_accepted("user")
+    def userReadBook():
+        if request.method == "POST":
+            data = request.get_json()
+            book = Books.query.get(data["book_id"])
+            if not book:
+                return jsonify({"message": "Book not found"}), 404
+
+            book_info = {}
+            book_info["book_id"] = book.book_id
+            book_info["book_name"] = book.book_name
+            book_info["section_id"] = book.section.section_id
+            book_info["section_name"] = book.section.section_name
+            book_info["date_created"] = f"{book.date_created.strftime('%d')}-{book.date_created.strftime('%b')}-{book.date_created.strftime('%Y')}"
+            book_info["last_updated"] = f"{book.last_updated.strftime('%d')}-{book.last_updated.strftime('%b')}-{book.last_updated.strftime('%Y')}"
+            book_info["description"] = book.description
+            book_info["content"] = book.content
+            book_info["authors"] = book.authors
+            book_info["total_copies"] = book.total_copies
+            book_info["available_copies"] = book.available_copies
+            book_info["issued_copies"] = book.issued_copies
+            book_info["sold_copies"] = book.sold_copies
+            book_info["book_price"] = book.book_price
+            book_info["rating"] = book.rating
+
+            return book_info, 200
+
+    # return book
+    @app.route("/returnbook", methods=["POST"])
+    @auth_required("token")
+    @roles_accepted("user", "admin")
+    def returnBook():
+        if request.method == "POST":
+            data = request.get_json()
+            user_id = data["user_id"]
+            book_id = data["book_id"]
+            book = Books.query.get(data["book_id"])
+            if not book:
+                return jsonify({"message": "Book not found"}), 404
+
+            book.available_copies += 1
+            book.issued_copies -= 1
+
+            currently_issued_book = CurrentlyIssuedBooks.query.filter_by(user_id = user_id, book_id = book_id).first()
+
+            if not currently_issued_book:
+                return jsonify({"message": "Book not issued"}), 400
+
+            from sqlalchemy import desc
+
+            history_record = UserBookHistory.query.filter_by(user_id=user_id, book_id=book_id).order_by(UserBookHistory.date_issued.desc()).first()
+            history_record.date_returned = datetime.now()
+
+            db.session.delete(currently_issued_book)
+            db.session.commit()
+            return jsonify({"message": "Book returned successfully"}), 200
+
+    # book issued history
+    @app.route("/bookissuedhistory", methods=["GET", "POST"])
+    @auth_required("token")
+    @roles_accepted("user", "admin")
+    def bookissuedhistory():
+        if request.method == "GET":
+            history = UserBookHistory.query.order_by(UserBookHistory.date_issued.desc()).all()
+
+            if not history:
+                return jsonify({"message": "No history found"}), 404
+
+            historyList = []
+
+            for record in history:
+                historyRecord = {}
+                historyRecord["user_id"] = record.user_id
+                historyRecord["user_name"] = User.query.get(record.user_id).fullName
+                historyRecord["book_id"] = record.book_id
+                historyRecord["book_name"] = record.book_name
+                historyRecord["date_issued"] = f"{record.date_issued.strftime('%d')}-{record.date_issued.strftime('%b')}-{record.date_issued.strftime('%Y')}"
+                if record.date_returned:
+                    historyRecord["date_returned"] = f"{record.date_returned.strftime('%d')}-{record.date_returned.strftime('%b')}-{record.date_returned.strftime('%Y')}"
+                else:
+                    historyRecord["date_returned"] = "Currently Issued"
+                if record.date_bought:
+                    historyRecord["date_bought"] = f"{record.date_bought.strftime('%d')}-{record.date_bought.strftime('%b')}-{record.date_bought.strftime('%Y')}"
+                else:
+                    historyRecord["date_bought"] = "NA"
+                if record.is_bought:
+                    historyRecord["is_bought"] = "Yes"
+                else:
+                    historyRecord["is_bought"] = "No"
+                historyList.append(historyRecord)
+
+            return historyList, 200
+
+        if request.method == "POST":
+            data = request.get_json()
+            user_id = data["user_id"]
+
+            history = UserBookHistory.query.filter_by(user_id = user_id).order_by(UserBookHistory.date_issued.desc()).all()
+
+            if not history:
+                return jsonify({"message": "No history found"}), 404
+
+            historyList = []
+
+            for record in history:
+                historyRecord = {}
+                historyRecord["user_id"] = record.user_id
+                historyRecord["user_name"] = User.query.get(record.user_id).fullName
+                historyRecord["book_id"] = record.book_id
+                historyRecord["book_name"] = record.book_name
+                historyRecord["date_issued"] = f"{record.date_issued.strftime('%d')}-{record.date_issued.strftime('%b')}-{record.date_issued.strftime('%Y')}"
+                if record.date_returned:
+                    historyRecord["date_returned"] = f"{record.date_returned.strftime('%d')}-{record.date_returned.strftime('%b')}-{record.date_returned.strftime('%Y')}"
+                else:
+                    historyRecord["date_returned"] = "Currently Issued"
+                if record.date_bought:
+                    historyRecord["date_bought"] = f"{record.date_bought.strftime('%d')}-{record.date_bought.strftime('%b')}-{record.date_bought.strftime('%Y')}"
+                else:
+                    historyRecord["date_bought"] = "NA"
+                if record.is_bought:
+                    historyRecord["is_bought"] = "Yes"
+                else:
+                    historyRecord["is_bought"] = "No"
+                historyList.append(historyRecord)
+
+            return historyList, 200
