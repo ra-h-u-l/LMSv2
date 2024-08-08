@@ -10,48 +10,51 @@ const UserDashboard = {
                 <h3>Requested Books</h3>
                 <h4 v-if="!requestList">No Requests</h4>
                 <table v-if="requestList" class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col"></th>
-                                <th scope="col">Book Name</th>
-                                <th scope="col">Date of Request</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="(book, index) in requestList" v-if="book.user_id == user_id">
-                                <td >&#128214;</td>
-                                <td >{{book.book_name}}</td>
-                                <td >{{book.date_requested}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <thead>
+                        <tr>
+                            <th scope="col"></th>
+                            <th scope="col">Book Name</th>
+                            <th scope="col">Date of Request</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(book, index) in requestList" v-if="book.user_id == user_id">
+                            <td >&#128214;</td>
+                            <td >{{book.book_name}}</td>
+                            <td >{{book.date_requested}}</td>
+                        </tr>
+                    </tbody>
+                </table>
 
                     <br>
 
-                    <h3>Borrowed Books</h3>
-                    <h4 v-if="!issueList">No Requests</h4>
-                    <table v-if="issueList" class="table">
-                            <thead>
-                                <tr>
-                                    <th scope="col"></th>
-                                    <th scope="col">Book Name</th>
-                                    <th scope="col">Date of Request</th>
-                                    <th scope="col">Date of Issue</th>
-                                    <th scope="col">Read Book</th>
-                                    <th scope="col">Return Book</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="(book, index) in issueList" v-if="book.user_id == user_id">
-                                    <td >&#128214;</td>
-                                    <td >{{book.book_name}}</td>
-                                    <td >{{book.date_requested}}</td>
-                                    <td >{{book.date_issued}}</td>
-                                    <td ><button @click="readBook(book)" type="button" class="btn btn-success">Read</button></td>
-                                    <td ><button @click="returnBook(book)" type="button" class="btn btn-warning">Return</button></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                <h3>Borrowed Books</h3>
+                <h4 v-if="!issueList">No Requests</h4>
+                <table v-if="issueList" class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col"></th>
+                            <th scope="col">Book Name</th>
+                            <th scope="col">Date of Request</th>
+                            <th scope="col">Date of Issue</th>
+                            <th scope="col">Read Book</th>
+                            <th scope="col">Rating</th>
+                            <th scope="col">Return Book</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(book, index) in issueList" v-if="book.user_id == user_id">
+                            <td >&#128214;</td>
+                            <td >{{book.book_name}}</td>
+                            <td >{{book.date_requested}}</td>
+                            <td >{{book.date_issued}}</td>
+                            <td ><button @click="readBook(book)" type="button" class="btn btn-success">Read</button></td>
+                            <td><button @click="rateBook(book)" type="button" class="btn btn-success">Rate this book</button></td>
+                            <td ><button @click="returnBook(book)" type="button" class="btn btn-warning">Return</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+
             </center>
         </div>
     `,
@@ -74,6 +77,14 @@ const UserDashboard = {
             sessionStorage.setItem("book_id", book.book_id);
             router.push("/userreadbook");
         },
+
+        // rate book
+        rateBook(book){
+            sessionStorage.setItem("book_id", book.book_id);
+            sessionStorage.setItem("book_name", book.book_name);
+            router.push("/userratebook");
+        },
+
 
         // return book
         async returnBook(book){

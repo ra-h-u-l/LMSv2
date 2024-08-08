@@ -398,3 +398,93 @@ def create_views(app):
                 historyList.append(historyRecord)
 
             return historyList, 200
+
+    # rate book
+    @app.route("/ratebook", methods=["POST"])
+    @auth_required("token")
+    @roles_accepted("user")
+    def ratebook():
+        if request.method == "POST":
+            data = request.get_json()
+            user_id = data["user_id"]
+            book_id = data["book_id"]
+            rating = data["rating"]
+            review = data["review"]
+            
+            myRatingRecord = BookRating.query.filter_by(user_id = user_id, book_id = book_id).first()
+            if myRatingRecord:
+                return jsonify({"message": "You have already rated this book"}), 400
+
+            book = Books.query.get(book_id)
+
+            if not book:
+                return jsonify({"message": "Book not found"}), 404
+
+            ratingData = BookRating(
+                book_id = book_id,
+                user_id = user_id,
+                rating = rating,
+                review = review
+            )
+            db.session.add(ratingData)
+            db.session.commit()
+
+            bookRatingRecords = BookRating.query.filter_by(book_id = book_id).all()
+            if bookRatingRecords:
+                book = Books.query.get(book_id)
+                totalRatings = 0
+                count = 0
+
+                for record in bookRatingRecords:
+                    totalRatings += record.rating
+                    count += 1
+                
+                book.rating = round((totalRatings/count), 1)
+                
+                db.session.commit()
+
+            return jsonify({"message": "Rating updated successfully"}), 200
+
+    # stats
+    @app.route("/stats", methods=["GET", "POST"])
+    @auth_required("token")
+    @roles_accepted("admin", "user")
+    def stats():
+        if request.method == "GET":
+            return jsonify({"message": "Not implemented"}), 404
+
+
+    # search
+    @app.route("/search", methods=["POST"])
+    @auth_required("token")
+    @roles_accepted("admin", "user")
+    def search():
+        if request.method == "POST":
+            data = request.get_json()
+            keyword = data["keyword"]
+            results = Books.query.all()
+            if not results:
+                return jsonify({"message": "No results found"}), 404
+            
+            finalResults = []
+            for book in results:
+                if keyword.lower() in (book.book_name + book.section.section_name + book.authors).lower():
+                    book_info = {}
+                    book_info["book_id"] = book.book_id
+                    book_info["book_name"] = book.book_name
+                    book_info["section_id"] = book.section.section_id
+                    book_info["section_name"] = book.section.section_name
+                    book_info["date_created"] = f"{book.date_created.strftime('%d')}-{book.date_created.strftime('%b')}-{book.date_created.strftime('%Y')}"
+                    book_info["last_updated"] = f"{book.last_updated.strftime('%d')}-{book.last_updated.strftime('%b')}-{book.last_updated.strftime('%Y')}"
+                    book_info["description"] = book.description
+                    book_info["content"] = book.content
+                    book_info["authors"] = book.authors
+                    book_info["total_copies"] = book.total_copies
+                    book_info["available_copies"] = book.available_copies
+                    book_info["issued_copies"] = book.issued_copies
+                    book_info["sold_copies"] = book.sold_copies
+                    book_info["book_price"] = book.book_price
+                    book_info["rating"] = book.rating
+                    finalResults.append(book_info)
+
+            return finalResults, 200

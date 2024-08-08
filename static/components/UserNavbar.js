@@ -28,8 +28,8 @@ const UserNavbar = {
                         </li>
                     </ul>
                     <form class="d-flex" role="search">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-outline-success" type="submit">Search</button>
+                        <input v-model="keyword" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                        <button @click="search()" class="btn btn-outline-success" type="submit">Search</button>
                     </form>
                     <button @click="userLogout()" class="btn btn-outline-danger" type="submit">Logout</button>
                 </div>
@@ -37,7 +37,22 @@ const UserNavbar = {
         </nav>
         `,
 
+    data() {
+        return {
+            keyword : null,
+        }
+    },
+
     methods : {
+        // search
+        search() {
+            if(this.keyword != null) {
+                sessionStorage.setItem('keyword', this.keyword);
+                router.push("/usersearchresults");
+            }
+        },
+
+        // user logout
         userLogout() {
             store.dispatch("logout");
             router.push("/");

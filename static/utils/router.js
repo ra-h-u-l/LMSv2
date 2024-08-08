@@ -12,6 +12,7 @@ import AdminUpdateBook from "./../pages/AdminUpdateBook.js";
 import AdminReadBook from "./../pages/AdminReadBook.js";
 import AdminParticularSectionBooks from "./../pages/AdminParticularSectionBooks.js";
 import AdminBookHistory from "./../pages/AdminBookHistory.js";
+import AdminSearchResuslts from "./../pages/AdminSearchResuslts.js";
 // Pages (User) ================================================================
 import UserSignup from "./../pages/UserSignup.js";
 import UserLogin from "./../pages/UserLogin.js";
@@ -21,6 +22,8 @@ import UserParticularSectionBooks from "./../pages/UserParticularSectionBooks.js
 import UserAllBooks from "./../pages/UserAllBooks.js";
 import UserReadBook from "./../pages/UserReadBook.js";
 import UserBookHistory from "./../pages/UserBookHistory.js";
+import UserRateBook from "./../pages/UserRateBook.js";
+import UserSearchResults from "./../pages/UserSearchResults.js";
 
 
 const routes = [
@@ -38,6 +41,7 @@ const routes = [
     {path: "/adminreadbook", component : AdminReadBook},
     {path: "/adminparticularsectionbooks", component : AdminParticularSectionBooks},
     {path: "/adminbookhistory", component : AdminBookHistory},
+    {path: "/adminsearchresults", component : AdminSearchResuslts},
     // User Pages =================================================================
     {path: "/usersignup", component : UserSignup},
     {path: "/userlogin", component : UserLogin},
@@ -47,6 +51,8 @@ const routes = [
     {path: "/userallbooks", component : UserAllBooks},
     {path: "/userreadbook", component : UserReadBook},
     {path: "/userbookhistory", component : UserBookHistory},
+    {path: "/userratebook", component : UserRateBook},
+    {path: "/usersearchresults", component : UserSearchResults},
 ]
 
 const router = new VueRouter({

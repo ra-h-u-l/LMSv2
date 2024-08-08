@@ -109,6 +109,7 @@ class BookRating(db.Model):
     book_id = db.Column(db.Integer(), db.ForeignKey("books.book_id"))
     user_id = db.Column(db.Integer(), db.ForeignKey("user.id"))
     rating = db.Column(db.Integer(), nullable = False)
+    review = db.Column(db.String())
 
 # #1 --------------------------> login_credentials_table <--------------------------------
 # class LoginCredentials(db.Model):
