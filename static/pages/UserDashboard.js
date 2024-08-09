@@ -8,7 +8,7 @@ const UserDashboard = {
             <UserNavbar/>
             <center>
                 <h3>Requested Books</h3>
-                <h4 v-if="!requestList">No Requests</h4>
+                <p v-if="!requestList">No Requests</p>
                 <table v-if="requestList" class="table">
                     <thead>
                         <tr>
@@ -26,10 +26,10 @@ const UserDashboard = {
                     </tbody>
                 </table>
 
-                    <br>
+                <br>
 
                 <h3>Borrowed Books</h3>
-                <h4 v-if="!issueList">No Requests</h4>
+                <p v-if="!issueList">No Borrowed Books</p>
                 <table v-if="issueList" class="table">
                     <thead>
                         <tr>
@@ -55,6 +55,33 @@ const UserDashboard = {
                     </tbody>
                 </table>
 
+                <br>
+
+                <h3>Bought Books</h3>
+                <p v-if="!boughtBooks">No Books Bought</p>
+                <table v-if="boughtBooks" class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col"></th>
+                            <th scope="col">Book Name</th>
+                            <th scope="col">Date of Purchase</th>
+                            <th scope="col">Read Book</th>
+                            <th scope="col">Rating</th>
+                            <th scope="col">Download</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(book, index) in boughtBooks">
+                            <td >&#128214;</td>
+                            <td >{{book.book_name}}</td>
+                            <td >{{book.date_bought}}</td>
+                            <td ><button @click="readBook(book)" type="button" class="btn btn-success">Read</button></td>
+                            <td><button @click="rateBook(book)" type="button" class="btn btn-success">Rate this book</button></td>
+                            <td><button @click="downloadBook(book)" type="button" class="btn btn-success">Download</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+
             </center>
         </div>
     `,
@@ -68,6 +95,7 @@ const UserDashboard = {
             requestList : null,
             issueList : null,
             user_id : store.state.id,
+            boughtBooks : null
         }
     },
 
@@ -117,6 +145,35 @@ const UserDashboard = {
                 alert(data);
             }
         },
+
+        async downloadBook(book){
+            const token = store.getters.getLoginData.token;
+            const response = await fetch(window.location.origin + "/downloadbook", {
+                method : "POST",
+                headers : {
+                    "Content-Type" : "application/json",
+                    "Authentication-Token" : token
+                },
+                body : JSON.stringify({
+                    "book_id" : book.book_id,
+                    "user_id" : store.state.id
+                })
+            });
+
+            if (response.status === 200) {
+                const blob = await response.blob(); // Get the PDF as a Blob
+                const url = window.URL.createObjectURL(blob); // Create a URL for the Blob
+                const a = document.createElement('a'); // Create a download link element
+                a.href = url;
+                a.download = `${book.book_name}.pdf`; // Set the download file name
+                document.body.appendChild(a);
+                a.click(); // Trigger the download
+                document.body.removeChild(a); // Clean up
+                window.URL.revokeObjectURL(url); // Release the object URL
+            } else {
+                console.error("Failed to download book");
+            }
+        }
         
     },
 
@@ -174,7 +231,35 @@ const UserDashboard = {
         if(response3.status === 200){
             const data = await response3.json();
             this.issueList = data;
-            console.log("List:", data);
+            console.log("issueList:", data);
+        }
+
+        if(response3.status === 404){
+            const data = await response3.json();
+            console.log(data);
+        }
+
+        // Bought Books
+        const response4 = await fetch(window.location.origin + "/soldbooks", {
+            method : "POST",
+            headers : {
+                "Content-Type" : "application/json",
+                "Authentication-Token" : token
+            },
+            body : JSON.stringify({
+                "user_id" : this.user_id
+            })
+        });
+
+        if(response4.status === 200){
+            const data = await response4.json();
+            this.boughtBooks = data;
+            // console.log("Bought List:", this.boughtBooks);
+        }
+
+        if(response4.status === 404){
+            const data = await response4.json();
+            console.log(data);
         }
     }
 };

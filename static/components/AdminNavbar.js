@@ -33,6 +33,9 @@ const AdminNavbar = {
                         <li class="nav-item">
                             <router-link class="nav-link active" to="/adminbookhistory">Book Issue History</router-link>
                         </li>
+                        <li class="nav-item">
+                            <router-link class="nav-link active" to="/soldbookhistory">Sold Book History</router-link>
+                        </li>
                     </ul>
                     <form class="d-flex" role="search">
                         <input v-model="keyword" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">

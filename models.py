@@ -110,6 +110,7 @@ class BookRating(db.Model):
     user_id = db.Column(db.Integer(), db.ForeignKey("user.id"))
     rating = db.Column(db.Integer(), nullable = False)
     review = db.Column(db.String())
+    date_rated = db.Column(db.DateTime())
 
 # #1 --------------------------> login_credentials_table <--------------------------------
 # class LoginCredentials(db.Model):

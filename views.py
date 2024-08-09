@@ -1,10 +1,11 @@
-from flask import render_template_string, render_template, jsonify, request
+from flask import render_template_string, render_template, jsonify, request, send_file, after_this_request
 from flask_security import auth_required, current_user, roles_required, roles_accepted, SQLAlchemyUserDatastore
 from extensions import db, security
 from flask_security.utils import hash_password, verify_password
 # from models import User, Role
 from models import *
 from datetime import datetime, timedelta
+from fpdf import FPDF
 
 userDatastore = SQLAlchemyUserDatastore(db, User, Role)
 
@@ -129,6 +130,8 @@ def create_views(app):
     @roles_accepted("admin", "user")
     def currentlyIssuedBooks():
         books = CurrentlyIssuedBooks.query.all()
+        if not books:
+            return jsonify({"error": "No books currently issued"}), 404
         book_data = []
         for book in books:
             book_info = {}
@@ -250,6 +253,10 @@ def create_views(app):
 
         if request.method == "POST":
             data = request.get_json()
+
+            if SoldBooks.query.filter_by(book_id = data["book_id"], user_id = data["user_id"]).first():
+                return jsonify({"message": "You have already bought this book"}), 400
+
             available_copies = Books.query.get(data["book_id"]).available_copies
             if available_copies == 0:
                 return jsonify({"message": "Book not available for borrowing"}), 400
@@ -424,7 +431,8 @@ def create_views(app):
                 book_id = book_id,
                 user_id = user_id,
                 rating = rating,
-                review = review
+                review = review,
+                date_rated = datetime.now()
             )
             db.session.add(ratingData)
             db.session.commit()
@@ -445,7 +453,7 @@ def create_views(app):
 
             return jsonify({"message": "Rating updated successfully"}), 200
 
-    # stats
+    # stats ========================================================================================================
     @app.route("/stats", methods=["GET", "POST"])
     @auth_required("token")
     @roles_accepted("admin", "user")
@@ -488,3 +496,162 @@ def create_views(app):
                     finalResults.append(book_info)
 
             return finalResults, 200
+
+    # buy book
+    @app.route("/buybook", methods=["POST"])
+    @auth_required("token")
+    @roles_accepted("user")
+    def buybook():
+        if request.method == "POST":
+            data = request.get_json()
+            user_id = data["user_id"]
+            book_id = data["book_id"]
+
+            already_bought = UserBookHistory.query.filter_by(user_id = user_id, book_id = book_id).all()
+            if already_bought:
+                for record in already_bought:
+                    if record.is_bought == True:
+                        return jsonify({"message": "Book already bought"}), 400
+
+            book = Books.query.get(book_id)
+            if not book:
+                return jsonify({"message": "Book not found"}), 404
+
+            if book.available_copies == 0:
+                return jsonify({"message": "Book not available"}), 400
+
+            book.available_copies -= 1
+            book.sold_copies += 1
+            db.session.commit()
+
+            history = UserBookHistory(
+                user_id = user_id,
+                book_id = book_id,
+                book_name = book.book_name,
+                date_bought = datetime.now(),
+                is_bought = True,
+            )
+            db.session.add(history)
+
+            sold = SoldBooks(
+                user_id = user_id,
+                book_id = book_id,
+                date_sold = datetime.now(),
+            )
+            db.session.add(sold)
+
+            db.session.commit()
+
+            return jsonify({"message": "Book bought successfully"}), 200
+
+    # sold books
+    @app.route("/soldbooks", methods=["GET", "POST"])
+    @auth_required("token")
+    @roles_accepted("admin", "user")
+    def soldbooks():
+        if request.method == "GET":
+            history = UserBookHistory.query.filter_by(is_bought = True).all()
+
+            if not history:
+                return jsonify({"message": "No books sold"}), 404
+
+            soldBooks = []
+            for record in history:
+                book_info = {}
+                book_info["date_bought"] = f"{record.date_bought.strftime('%d')}-{record.date_bought.strftime('%b')}-{record.date_bought.strftime('%Y')}"
+                book_info["fullName"] = User.query.get(record.user_id).fullName
+                book = Books.query.get(record.book_id)
+                book_info["book_id"] = book.book_id
+                book_info["book_name"] = book.book_name
+                book_info["section_id"] = book.section.section_id
+                book_info["section_name"] = book.section.section_name
+                book_info["date_created"] = f"{book.date_created.strftime('%d')}-{book.date_created.strftime('%b')}-{book.date_created.strftime('%Y')}"
+                book_info["last_updated"] = f"{book.last_updated.strftime('%d')}-{book.last_updated.strftime('%b')}-{book.last_updated.strftime('%Y')}"
+                book_info["description"] = book.description
+                book_info["content"] = book.content
+                book_info["authors"] = book.authors
+                book_info["total_copies"] = book.total_copies
+                book_info["available_copies"] = book.available_copies
+                book_info["issued_copies"] = book.issued_copies
+                book_info["sold_copies"] = book.sold_copies
+                book_info["book_price"] = book.book_price
+                book_info["rating"] = book.rating
+                soldBooks.append(book_info)
+
+            return soldBooks, 200
+
+        if request.method == "POST":
+            data = request.get_json()
+            user_id = data["user_id"]
+            
+            history = UserBookHistory.query.filter_by(user_id = user_id, is_bought = True).all()
+
+            if not history:
+                return jsonify({"message": "No books Bought"}), 404
+
+            boughtBooks = []
+
+            for record in history:
+                book = Books.query.get(record.book_id)
+                book_info = {}
+                book_info["date_bought"] = f"{record.date_bought.strftime('%d')}-{record.date_bought.strftime('%b')}-{record.date_bought.strftime('%Y')}"
+                book_info["book_id"] = book.book_id
+                book_info["book_name"] = book.book_name
+                book_info["section_id"] = book.section.section_id
+                book_info["section_name"] = book.section.section_name
+                book_info["date_created"] = f"{book.date_created.strftime('%d')}-{book.date_created.strftime('%b')}-{book.date_created.strftime('%Y')}"
+                book_info["last_updated"] = f"{book.last_updated.strftime('%d')}-{book.last_updated.strftime('%b')}-{book.last_updated.strftime('%Y')}"
+                book_info["description"] = book.description
+                book_info["content"] = book.content
+                book_info["authors"] = book.authors
+                book_info["total_copies"] = book.total_copies
+                book_info["available_copies"] = book.available_copies
+                book_info["issued_copies"] = book.issued_copies
+                book_info["sold_copies"] = book.sold_copies
+                book_info["book_price"] = book.book_price
+                book_info["rating"] = book.rating
+                boughtBooks.append(book_info)
+
+            return boughtBooks, 200
+
+    # download book
+    @app.route("/downloadbook", methods=["POST"])
+    @auth_required("token")
+    @roles_accepted("user")
+    def downloadbook():
+        if request.method == "POST":
+            data = request.get_json()
+            book_id = data["book_id"]
+            user_id = data["user_id"]
+            book = Books.query.get(book_id)
+            if not book:
+                return jsonify({"message": "Book doesn't exist"}), 404
+
+            content = book.content
+
+            # Generate pdf file
+            pdf = FPDF()
+            pdf.add_page()
+            pdf.set_font("Arial", size = 12)
+            # Add content to PDF
+            lines = content.split("\n")
+            for line in lines:
+                while len(line) > 95:
+                    pdf.cell(200, 10, txt=line[:95], ln=True)
+                    line = line[95:]
+                pdf.cell(200, 10, txt=line, ln=True)
+
+            # Save the PDF to a file
+            file_path = f"static/{user_id}_{book.book_name}.pdf"
+            pdf.output(file_path)
+
+            @after_this_request
+            def remove_file(response):
+                try:
+                    os.remove(file_path)
+                except Exception as error:
+                    print(f"Error removing or closing downloaded file handle: {error}")
+                return response
+            
+            return send_file(file_path, as_attachment=True), 200
+

@@ -12,6 +12,7 @@ Flask-RESTful==0.3.10
 Flask-Security-Too==5.4.3
 Flask-SQLAlchemy==3.1.1
 Flask-WTF==1.2.1
+fpdf==1.7.2
 greenlet==3.0.3
 idna==3.7
 importlib_resources==6.4.0

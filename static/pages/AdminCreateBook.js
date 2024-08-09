@@ -99,6 +99,12 @@ const AdminCreateBook = {
                 // window.location.reload();
             }
 
+            if(response.status === 400){
+                const data = await response.json();
+                alert(data.message);
+                // window.location.reload();
+            }
+
             
         },
     },
