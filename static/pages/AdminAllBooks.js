@@ -25,6 +25,7 @@ const AdminAllBooks = {
                                 <th scope="col">Sold Copies</th>
                                 <th scope="col">Price</th>
                                 <th scope="col">Rating</th>
+                                <th scope="col">View Rating</th>
                                 <th scope="col">Read Book</th>
                                 <th scope="col">Update</th>
                                 <th scope="col">Delete</th>
@@ -45,6 +46,7 @@ const AdminAllBooks = {
                                 <td>{{book.sold_copies}}</td>
                                 <td>₹ {{book.book_price}}</td>
                                 <td>{{book.rating}}</td>
+                                <td><button @click="viewRating(book)" type="button" class="btn btn-primary">View Ratings</button></td>
                                 <td><button @click="readBook(book)" type="button" class="btn btn-primary">Read</button></td>
                                 <td><button @click="updateBook(book)" type="button" class="btn btn-warning">Update</button></td>
                                 <td><button @click="deleteBook(book)" type="button" class="btn btn-danger">Delete</button></td>
@@ -67,6 +69,11 @@ const AdminAllBooks = {
     },
 
     methods : {
+        viewRating(book){
+            sessionStorage.setItem('book_id', book.book_id);
+            router.push("/adminviewrating");    
+        },
+
         viewSection(section_id){
             sessionStorage.setItem('section_id', section_id);
             router.push("/adminparticularsectionbooks");

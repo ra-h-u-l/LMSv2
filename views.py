@@ -355,7 +355,8 @@ def create_views(app):
                 historyRecord["user_name"] = User.query.get(record.user_id).fullName
                 historyRecord["book_id"] = record.book_id
                 historyRecord["book_name"] = record.book_name
-                historyRecord["date_issued"] = f"{record.date_issued.strftime('%d')}-{record.date_issued.strftime('%b')}-{record.date_issued.strftime('%Y')}"
+                if record.date_issued:
+                    historyRecord["date_issued"] = f"{record.date_issued.strftime('%d')}-{record.date_issued.strftime('%b')}-{record.date_issued.strftime('%Y')}"
                 if record.date_returned:
                     historyRecord["date_returned"] = f"{record.date_returned.strftime('%d')}-{record.date_returned.strftime('%b')}-{record.date_returned.strftime('%Y')}"
                 else:
@@ -366,6 +367,7 @@ def create_views(app):
                     historyRecord["date_bought"] = "NA"
                 if record.is_bought:
                     historyRecord["is_bought"] = "Yes"
+                    historyRecord["date_returned"] = None
                 else:
                     historyRecord["is_bought"] = "No"
                 historyList.append(historyRecord)
@@ -389,7 +391,8 @@ def create_views(app):
                 historyRecord["user_name"] = User.query.get(record.user_id).fullName
                 historyRecord["book_id"] = record.book_id
                 historyRecord["book_name"] = record.book_name
-                historyRecord["date_issued"] = f"{record.date_issued.strftime('%d')}-{record.date_issued.strftime('%b')}-{record.date_issued.strftime('%Y')}"
+                if record.date_issued:
+                    historyRecord["date_issued"] = f"{record.date_issued.strftime('%d')}-{record.date_issued.strftime('%b')}-{record.date_issued.strftime('%Y')}"
                 if record.date_returned:
                     historyRecord["date_returned"] = f"{record.date_returned.strftime('%d')}-{record.date_returned.strftime('%b')}-{record.date_returned.strftime('%Y')}"
                 else:
@@ -459,7 +462,35 @@ def create_views(app):
     @roles_accepted("admin", "user")
     def stats():
         if request.method == "GET":
-            return jsonify({"message": "Not implemented"}), 404
+            from sqlalchemy import func
+            distinct_subquery = db.session.query(
+                                                    UserBookHistory.book_id, UserBookHistory.user_id
+                                                ).distinct().subquery()
+        
+        # Count the number of rows in the subquery
+            readBooks = db.session.query(func.count()).select_from(distinct_subquery).scalar()
+        
+            boughtBooks = SoldBooks.query.count()
+            currentlyIssuedBooks = CurrentlyIssuedBooks.query.count()
+            pendingRequests = RequestedBooks.query.count()
+            return {"readBooks": readBooks, "boughtBooks": boughtBooks, "currentlyIssuedBooks": currentlyIssuedBooks, "pendingRequests": pendingRequests}, 200
+
+        if request.method == "POST":
+            data = request.get_json()
+            user_id = data["user_id"]
+            
+            from sqlalchemy import func
+            readBooks = (
+                        db.session.query(func.count(UserBookHistory.book_id.distinct()))
+                        .filter_by(user_id=user_id)
+                        .scalar()
+                    )
+
+            boughtBooks = SoldBooks.query.filter_by(user_id = user_id).count()
+
+            return {"readBooks": readBooks, "boughtBooks": boughtBooks}, 200
+
+
 
 
     # search
@@ -655,3 +686,29 @@ def create_views(app):
             
             return send_file(file_path, as_attachment=True), 200
 
+    # view rating
+    @app.route("/viewrating", methods=["GET", "POST"])
+    @auth_required("token")
+    @roles_accepted("admin", "user")
+    def viewrating():
+        if request.method == "POST":
+            data = request.get_json()
+            book_id = data["book_id"]
+            ratings = BookRating.query.filter_by(book_id = book_id).all()
+            if not ratings:
+                return jsonify({"message": "No ratings found"}), 404
+                
+            data = []
+
+            for rating in ratings:
+                rating_info = {}
+                rating_info["book_id"] = rating.book_id
+                rating_info["book_name"] = Books.query.get(rating.book_id).book_name
+                rating_info["user_id"] = rating.user_id
+                rating_info["fullName"] = User.query.get(rating.user_id).fullName
+                rating_info["rating"] = rating.rating
+                rating_info["review"] = rating.review
+                rating_info["date_rated"] = f"{rating.date_rated.strftime('%d')}-{rating.date_rated.strftime('%b')}-{rating.date_rated.strftime('%Y')}"
+                data.append(rating_info)
+
+            return data, 200

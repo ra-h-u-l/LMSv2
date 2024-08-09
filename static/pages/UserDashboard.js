@@ -29,7 +29,7 @@ const UserDashboard = {
                 <br>
 
                 <h3>Borrowed Books</h3>
-                <p v-if="!issueList">No Borrowed Books</p>
+                <p v-if="issueList == null">No Borrowed Books</p>
                 <table v-if="issueList" class="table">
                     <thead>
                         <tr>

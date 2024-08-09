@@ -22,6 +22,7 @@ const UserAllBooks = {
                                 <th scope="col">Available Copies</th>
                                 <th scope="col">Price</th>
                                 <th scope="col">Rating</th>
+                                <th scope="col">View Rating</th>
                                 <th scope="col">Borrow Book</th>
                                 <th scope="col">Buy Book</th>
                             </tr>
@@ -38,6 +39,7 @@ const UserAllBooks = {
                                 <td>{{book.available_copies}}</td>
                                 <td>₹ {{book.book_price}}</td>
                                 <td>{{book.rating}}</td>
+                                <td><button @click="viewRating(book)" type="button" class="btn btn-primary">View Ratings</button></td>
                                 <td><button @click="borrowRequest(book)" type="button" class="btn btn-primary">Request to Borrow</button></td>
                                 <td><button @click="buy(book)" type="button" class="btn btn-primary">Buy Now</button></td>
                             </tr>
@@ -59,6 +61,10 @@ const UserAllBooks = {
     },
 
     methods : {
+        viewRating(book){
+            sessionStorage.setItem('book_id', book.book_id);
+            router.push("/userviewrating");    
+        },
 
         async borrowRequest(book){
             const user_id = store.state.id;

@@ -21,10 +21,10 @@ const UserNavbar = {
                             <router-link class="nav-link active" to="/userallbooks">All Books</router-link>
                         </li>
                         <li class="nav-item">
-                            <router-link class="nav-link active" to="/">Stats</router-link>
+                            <router-link class="nav-link active" to="/userstats">Stats</router-link>
                         </li>
                         <li class="nav-item">
-                            <router-link class="nav-link active" to="/userbookhistory">My History</router-link>
+                            <router-link class="nav-link active" to="/userbookhistory">My Reading History</router-link>
                         </li>
                     </ul>
                     <form class="d-flex" role="search">
