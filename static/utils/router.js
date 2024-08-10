@@ -1,3 +1,5 @@
+import store from "./store.js";
+
 // Home ========================================================================
 import Home from "./../pages/Home.js";
 // Pages (Admin) ===============================================================
@@ -62,13 +64,40 @@ const routes = [
     {path: "/userbookhistory", component : UserBookHistory},
     {path: "/userratebook", component : UserRateBook},
     {path: "/usersearchresults", component : UserSearchResults},
-    {path: "/paymentpage", component : UserPaymentPage},
+    {path: "/userpaymentpage", component : UserPaymentPage},
     {path: "/userstats", component : UserStats},
     {path: "/userviewrating", component : UserViewRating},
 ]
 
 const router = new VueRouter({
     routes,
-})
+});
+
+const publicRoutes = [
+    "/",
+    "/adminlogin",
+    "/usersignup",
+    "/userlogin"
+];
+
+router.beforeEach((to, from, next) => {
+    if (publicRoutes.includes(to.path)) {
+        next();
+    } else {
+        if(to.path.startsWith("/admin")) {
+            if(store.state.role !== "admin") {
+                next("/adminlogin");
+            } else {
+                next();
+            }
+        } else if(to.path.startsWith("/user")) {
+            if(store.state.role !== "user") {
+                next("/userlogin");
+            } else {
+                next();
+            }
+        }
+    }
+});
 
 export default router;

@@ -97,7 +97,7 @@ const UserAllBooks = {
             sessionStorage.setItem("book_id", book.book_id);
             sessionStorage.setItem("book_name", book.book_name);
             sessionStorage.setItem("book_price", book.book_price);
-            router.push("/paymentpage");
+            router.push("/userpaymentpage");
         }
         
     },

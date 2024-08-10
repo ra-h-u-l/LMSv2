@@ -1,6 +1,6 @@
 from flask_restful import Resource, Api, reqparse
 from models import *
-from extensions import db
+from extensions import db, cache
 from flask_security import auth_required, roles_required, roles_accepted
 
 api = Api()
@@ -24,6 +24,7 @@ parser.add_argument("book_price", type = int)
 class SectionsApi(Resource):
     @auth_required("token")
     @roles_accepted("admin", "user")
+    @cache.cached(timeout = 30)
     def get(self):
         all_sections = Sections.query.all()
         all_sections_data = []
@@ -86,6 +87,7 @@ class SectionsApi(Resource):
 class BooksApi(Resource):
     @auth_required("token")
     @roles_accepted("admin", "user")
+    @cache.cached(timeout = 30)
     def get(self):
         all_books = Books.query.all()
         all_books_data = []

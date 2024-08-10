@@ -1,8 +1,9 @@
 from flask import Flask
 import views
-from extensions import db, security
+from extensions import db, security, cache
 import create_initial_data
 import resources
+from flask_caching import Cache
 
 def create_app():
     app = Flask(__name__)
@@ -15,7 +16,14 @@ def create_app():
     app.config["SECURITY_TOKEN_AUTHENTICATION_HEADER"] = "Authentication-Token"
     app.config["SECURITY_TOKEN_MAX_AGE"] = 3600          # in seconds
     app.config["SECURITY_LOGIN_WITHOUT_CONFIRMATION"] = True
-    
+
+    # cache configuration
+    app.config["CACHE_DEFAULT_TIMEOUT"] = 300
+    app.config["DEBUG"] = True
+    app.config["CACHE_TYPE"] = "RedisCache"
+    app.config["CACHE_REDIS_PORT"] = 6379
+
+    cache.init_app(app)
     db.init_app(app)
 
     with app.app_context():
@@ -33,10 +41,13 @@ def create_app():
 
     views.create_views(app)
 
+    # api configuration
     resources.api.init_app(app)
 
     return app
 
+app = create_app()
+
 if __name__ == "__main__":
-    app = create_app()
+    # app = create_app()
     app.run(debug=True)
