@@ -6,10 +6,51 @@ from flask_security.utils import hash_password, verify_password
 from models import *
 from datetime import datetime, timedelta
 from fpdf import FPDF
+from celery.result import AsyncResult
+from tasks import add, create_csv_report
 
 userDatastore = SQLAlchemyUserDatastore(db, User, Role)
 
 def create_views(app):
+    # celery
+    @app.route("/celerydemo")
+    def celery_demo():
+        task = add.delay(10, 20)
+        return jsonify({"task_id": task.id}), 200
+
+    @app.route("/get-task/<task_id>")
+    def get_task(task_id):
+        result = AsyncResult(task_id)
+
+        if result.ready():
+            return jsonify({"result": result.result}), 200
+        else:
+            return "task not ready", 405
+
+    # generate report
+    @app.route("/admingeneratereport", methods=["GET"])
+    @auth_required("token")
+    @roles_required("admin")
+    def adminGenerateReport():
+        if request.method == "GET":
+            task = create_csv_report.delay()
+            return jsonify({"task_id": task.id}), 200
+
+    # get generated report
+    @app.route("/admingetreport/<task_id>")
+    @auth_required("token")
+    @roles_required("admin")
+    def adminGetReport(task_id):
+        result = AsyncResult(task_id)
+
+        if result.ready():
+            # return send_file(result.result, as_attachment=True)
+            return send_file("./downloads/report.csv", as_attachment=True), 200
+        else:
+            return jsonify({"result": "File is not ready for download. Please wait."}), 405
+
+
+
     # homepage
     @app.route("/")
     def home():
@@ -697,7 +738,7 @@ def create_views(app):
             ratings = BookRating.query.filter_by(book_id = book_id).all()
             if not ratings:
                 return jsonify({"message": "No ratings found"}), 404
-                
+
             data = []
 
             for rating in ratings:

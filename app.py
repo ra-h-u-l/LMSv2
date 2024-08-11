@@ -4,6 +4,14 @@ from extensions import db, security, cache
 import create_initial_data
 import resources
 from flask_caching import Cache
+from worker import celery_init_app
+# import flask_excel as excel
+from tasks import daily_reminder, monthly_activity_report
+from celery.schedules import crontab
+# from models import *
+
+celery_app = None
+
 
 def create_app():
     app = Flask(__name__)
@@ -46,7 +54,25 @@ def create_app():
 
     return app
 
+
 app = create_app()
+celery_app = celery_init_app(app)
+
+
+
+@celery_app.on_after_configure.connect
+def setup_periodic_tasks(sender, **kwargs):
+    # Daily reminder to users for returning books at 4:47 PM
+    sender.add_periodic_task(
+        crontab(minute=47, hour=16),
+        daily_reminder.s(),
+    )
+
+    # Monthly Activity Report sent to admin on 1st day of every month
+    sender.add_periodic_task(
+        crontab(minute=2, hour=9, day_of_month=1),
+        monthly_activity_report.s(),
+    )
 
 if __name__ == "__main__":
     # app = create_app()

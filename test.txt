@@ -1,8 +1,0 @@
-find . \( -name ".env" -o -name ".vscode" -o -name "__pycache__" -o -name "instance" \) -type d -prune -o \( -name "*.js" -o -name "*.html" -o -name "*.css" -o -name "*.py" \) -type f -exec sh -c 'echo "File: {}"; cat {}; echo' \;
-
-
-Redis server (WSL)
-Frontend (CMD)
-Backend (WSL) (VENV)
-MailHog (WSL)
-Celery -> two terminals (Beat scheduler + Worker) (WSL) (VENV) (from Backend Folder)

@@ -18,6 +18,7 @@ import AdminSearchResuslts from "./../pages/AdminSearchResuslts.js";
 import AdminSoldBooks from "./../pages/AdminSoldBooks.js";
 import AdminStats from "./../pages/AdminStats.js";
 import AdminViewRating from "./../pages/AdminViewRating.js";
+import AdminDownloadReport from "./../pages/AdminDownloadReport.js";
 // Pages (User) ================================================================
 import UserSignup from "./../pages/UserSignup.js";
 import UserLogin from "./../pages/UserLogin.js";
@@ -53,6 +54,7 @@ const routes = [
     {path: "/soldbookhistory", component : AdminSoldBooks},
     {path: "/adminstats", component : AdminStats},
     {path: "/adminviewrating", component : AdminViewRating},
+    {path: "/admindownloadreport", component : AdminDownloadReport},
     // User Pages =================================================================
     {path: "/usersignup", component : UserSignup},
     {path: "/userlogin", component : UserLogin},

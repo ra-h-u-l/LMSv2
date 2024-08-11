@@ -37,6 +37,7 @@ const AdminNavbar = {
                             <router-link class="nav-link active" to="/soldbookhistory">Sold Book History</router-link>
                         </li>
                     </ul>
+                    <button @click="adminReport()" class="btn btn-outline-success" type="submit">CSV Report</button>
                     <form class="d-flex" role="search">
                         <input v-model="keyword" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                         <button @click="search()" class="btn btn-outline-success" type="submit">Search</button>
@@ -66,8 +67,28 @@ const AdminNavbar = {
         adminLogout() {
             store.dispatch("logout");
             router.push("/");
+        },
+
+        // admin CSV report
+        async adminReport() {
+            const token = store.getters.getLoginData.token;
+            const response = await fetch(window.location.origin + "/admingeneratereport", {
+                method : "GET",
+                headers : {
+                    "Authentication-Token" : token
+                }
+            });
+
+            if(response.status === 200) {
+                const data = await response.json();
+                console.log(data);
+                const task_id = sessionStorage.setItem('task_id', data.task_id);
+                router.push("/admindownloadreport");
+
+                
+            }
         }
-    }
+    },
 
 }
 
