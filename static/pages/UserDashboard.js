@@ -7,18 +7,18 @@ const UserDashboard = {
         <div>
             <UserNavbar/>
             <center>
-                <h3>Requested Books</h3>
+                <h3 style="font-family: Arial, sans-serif; color: darkblue; font-weight: bold; margin-top: 2px; text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);">Requested Books</h3>
                 <p v-if="!requestList">No Requests</p>
-                <table v-if="requestList" class="table">
+                <table v-if="requestList" class="table" style="width: 90%;">
                     <thead>
-                        <tr>
+                        <tr style="background-color: darkblue; color: white;">
                             <th scope="col"></th>
                             <th scope="col">Book Name</th>
                             <th scope="col">Date of Request</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(book, index) in requestList" v-if="book.user_id == user_id">
+                        <tr v-for="(book, index) in requestList" v-if="book.user_id == user_id" style="background-color: #5B9FC8; color: black; font-weight: 500;">
                             <td >&#128214;</td>
                             <td >{{book.book_name}}</td>
                             <td >{{book.date_requested}}</td>
@@ -28,11 +28,11 @@ const UserDashboard = {
 
                 <br>
 
-                <h3>Borrowed Books</h3>
+                <h3 style="font-family: Arial, sans-serif; color: darkblue; font-weight: bold; margin-top: 2px; text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);">Borrowed Books</h3>
                 <p v-if="issueList == null">No Borrowed Books</p>
-                <table v-if="issueList" class="table">
+                <table v-if="issueList" class="table" style="width: 90%;">
                     <thead>
-                        <tr>
+                        <tr style="background-color: darkblue; color: white;">
                             <th scope="col"></th>
                             <th scope="col">Book Name</th>
                             <th scope="col">Date of Request</th>
@@ -43,25 +43,25 @@ const UserDashboard = {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(book, index) in issueList" v-if="book.user_id == user_id">
+                        <tr v-for="(book, index) in issueList" v-if="book.user_id == user_id" style="background-color: #5B9FC8; color: black; font-weight: 500;">
                             <td >&#128214;</td>
                             <td >{{book.book_name}}</td>
                             <td >{{book.date_requested}}</td>
                             <td >{{book.date_issued}}</td>
-                            <td ><button @click="readBook(book)" type="button" class="btn btn-success">Read</button></td>
-                            <td><button @click="rateBook(book)" type="button" class="btn btn-success">Rate this book</button></td>
-                            <td ><button @click="returnBook(book)" type="button" class="btn btn-warning">Return</button></td>
+                            <td ><button @click="readBook(book)" type="button" class="btn btn-success" style="font-weight: 500;">Read</button></td>
+                            <td><button @click="rateBook(book)" type="button" class="btn btn-success" style="font-weight: 500;">Rate this book</button></td>
+                            <td ><button @click="returnBook(book)" type="button" class="btn btn-warning" style="font-weight: 500;">Return</button></td>
                         </tr>
                     </tbody>
                 </table>
 
                 <br>
 
-                <h3>Bought Books</h3>
+                <h3 style="font-family: Arial, sans-serif; color: darkblue; font-weight: bold; margin-top: 2px; text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);">Bought Books</h3>
                 <p v-if="!boughtBooks">No Books Bought</p>
-                <table v-if="boughtBooks" class="table">
+                <table v-if="boughtBooks" class="table" style="width: 90%;">
                     <thead>
-                        <tr>
+                        <tr style="background-color: darkblue; color: white;">
                             <th scope="col"></th>
                             <th scope="col">Book Name</th>
                             <th scope="col">Date of Purchase</th>
@@ -71,13 +71,13 @@ const UserDashboard = {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(book, index) in boughtBooks">
+                        <tr v-for="(book, index) in boughtBooks" style="background-color: #5B9FC8; color: black; font-weight: 500;">
                             <td >&#128214;</td>
                             <td >{{book.book_name}}</td>
                             <td >{{book.date_bought}}</td>
-                            <td ><button @click="readBook(book)" type="button" class="btn btn-success">Read</button></td>
-                            <td><button @click="rateBook(book)" type="button" class="btn btn-success">Rate this book</button></td>
-                            <td><button @click="downloadBook(book)" type="button" class="btn btn-success">Download</button></td>
+                            <td ><button @click="readBook(book)" type="button" class="btn btn-success" style="font-weight: 500;">Read</button></td>
+                            <td><button @click="rateBook(book)" type="button" class="btn btn-success" style="font-weight: 500;">Rate this book</button></td>
+                            <td><button @click="downloadBook(book)" type="button" class="btn btn-success" style="font-weight: 500;">Download</button></td>
                         </tr>
                     </tbody>
                 </table>

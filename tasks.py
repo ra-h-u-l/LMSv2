@@ -52,12 +52,10 @@ def create_csv_report():
         f.write(f"{record['user_id']},{record['user_name']},{record['book_id']},{record['book_name']},{record['section_id']},{record['section_name']},{record['date_issued']},{record['date_returned']},{record['date_bought']},{record['is_bought']}\n")
 
     f.close()
-
     # time.sleep(20)
-
     return "report.csv"
 
-
+# send daily reminder to users who have not returned their books =====================================
 @shared_task(ignore_result = False)
 def daily_reminder():
     current_time = datetime.now()
@@ -101,7 +99,7 @@ def daily_reminder():
             send_email(to, sub, message)
     return "Reminder Sent"
 
-# calculate the start and end date of the previous month
+# calculate the start and end date of the previous month =================================================
 def get_previous_month_dates():
     today = datetime.today()
     first_day_current_month = today.replace(day=1)
@@ -111,7 +109,7 @@ def get_previous_month_dates():
     return first_day_previous_month, last_day_previous_month
 
 
-# send monthly activity report
+# send monthly activity report ==============================================================
 @shared_task(ignore_result = False)
 def monthly_activity_report():
     # Get the start and end dates for the previous month

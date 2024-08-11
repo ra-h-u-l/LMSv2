@@ -7,7 +7,7 @@ const AdminDownloadReport = {
         <div>
             <AdminNavbar/>
             <center>
-                <h3 style="margin-top: 5%;">CSV Report : <button @click="adminDownloadReport()" class="btn btn-outline-success" type="submit" style="color: darkgreen;">Download Report</button></h3>
+                <h3 style="font-family: Arial, sans-serif; color: darkblue; font-weight: bold; margin-top: 2px; text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5); margin-top: 5%; background-color: #5B9FC8; width: 30%; padding: 10px;">CSV Report : <button @click="adminDownloadReport()" class="btn btn-outline-success" type="submit" style="color: darkblue; font-weight: 500;">Download Report</button></h3>
                 
             </center>
         </div>

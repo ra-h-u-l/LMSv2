@@ -7,11 +7,11 @@ const UserRateBook = {
         <div>
             <UserNavbar/>
             <center>
-                <h3>Rate Book</h3>
+                <h3 style="font-family: Arial, sans-serif; color: darkblue; font-weight: bold; margin-top: 2px; text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);">Rate Book</h3>
                 <div class="card" style="width: 30%;">
                     <div class="card-body">
-                        <h5 class="card-title">Rate Book: {{book_name}}</h5>
-                        <p class="card-text">Rate: <select v-model="rating" class="form-select" aria-label="Default select example" required>
+                        <h5 class="card-title" style="font-weight: 500;">Rate Book: {{book_name}}</h5>
+                        <p class="card-text" style="font-weight: 500;">Rate: <select v-model="rating" class="form-select" aria-label="Default select example" required>
                                 <option selected></option>
                                 <option type="number" value="1">1</option>
                                 <option type="number" value="2">2</option>
@@ -19,10 +19,10 @@ const UserRateBook = {
                                 <option type="number" value="4">4</option>
                                 <option type="number" value="5">5</option>
                             </select></p>
-                        <p class="card-text">Review</p>
-                        <p class="card-text"><textarea v-model="review" name="" id="" cols="60" rows="5" placeholder="Write your review" required></textarea></p>
-                        <button @click="rate()" v-if="!rating || !review" type="submit" class="btn btn-primary" disabled>Submit</button>
-                        <button @click="rate()" v-if="rating && review" type="submit" class="btn btn-primary">Submit</button>
+                        <p class="card-text" style="font-weight: 500;">Review</p>
+                        <p class="card-text"><textarea v-model="review" name="" id="" cols=50% rows=5% placeholder="Write your review" required></textarea></p>
+                        <button @click="rate()" v-if="!rating || !review" type="submit" class="btn btn-primary" disabled style="font-weight: 500;">Submit</button>
+                        <button @click="rate()" v-if="rating && review" type="submit" class="btn btn-primary" style="font-weight: 500;">Submit</button>
                     </div>
                 </div>
             </center>

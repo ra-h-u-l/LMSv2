@@ -7,10 +7,10 @@ const AdminAllSections = {
         <div>
             <AdminNavbar/>
             <center>
-                <h3>All Sections</h3>
+                <h3 style="font-family: Arial, sans-serif; color: darkblue; font-weight: bold; margin-top: 2px; text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);">All Sections</h3>
                 <div>
-                    <table class="table">
-                        <thead>
+                    <table class="table" style="width: 98%;">
+                        <thead style="background-color: darkblue; color: white;">
                             <tr>
                                 <th scope="col">S. No.</th>
                                 <th scope="col">Section Name</th>
@@ -23,15 +23,15 @@ const AdminAllSections = {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(section, index) in allSections">
+                            <tr v-for="(section, index) in allSections" style="background-color: #5B9FC8; color: black; font-weight: 500;">
                                 <th scope="row">{{index + 1}}</th>
                                 <td >{{section.section_name}}</td>
                                 <td >{{section.description}}</td>
-                                <td><button @click="viewBooks(section.section_id)" type="button" class="btn btn-primary">View Books</button></td>
+                                <td><button @click="viewBooks(section.section_id)" type="button" class="btn btn-primary" style="font-weight: 500;">View Books</button></td>
                                 <td>{{section.date_created}}</td>
                                 <td>{{section.last_updated}}</td>
-                                <td><button @click="updateSection(section)" type="button" class="btn btn-warning">Update</button></td>
-                                <td><button @click="deleteSection(section)" type="button" class="btn btn-danger">Delete</button></td>
+                                <td><button @click="updateSection(section)" type="button" class="btn btn-warning" style="font-weight: 500;">Update</button></td>
+                                <td><button @click="deleteSection(section)" type="button" class="btn btn-danger" style="font-weight: 500;">Delete</button></td>
                             </tr>
                         </tbody>
                     </table>

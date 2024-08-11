@@ -1,11 +1,31 @@
 #login-signup{
-    margin: 10% 25% 15% 25%;
+    margin: 7% 25% 8% 25%;
+    background-color: rgb(169, 187, 241);
+    box-shadow: 3px 3px 5px rgba(0, 0, 139, 0.5);
+    padding: 3%;
+    border-radius: 10px;
+}
+
+#login-signup h3{
+    font-family: Arial, sans-serif; 
+    color: darkblue; 
+    font-weight: bold; 
+    margin-top: 2px; 
+    text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);
 }
 
 body{
-    background-image: linear-gradient(to right, lightgrey, lightblue);
+    background-image: linear-gradient(90deg, #57c9c3 0%, #00d4ff 100%);
 }
 
 nav{
-    background-color: lightyellow;
+    background-image: linear-gradient(90deg, #020024 0%, #090979 35%);
+}
+
+li{
+    font-weight: 500;
+}
+
+label{
+    font-weight: 500;
 }

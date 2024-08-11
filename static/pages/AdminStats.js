@@ -7,11 +7,11 @@ const AdminStats = {
         <div>
             <AdminNavbar/>
             <center>
-                <h3>Stats</h3>
+                <h3 style="font-family: Arial, sans-serif; color: darkblue; font-weight: bold; margin-top: 2px; text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);">Stats</h3>
                 <div>
-                    <table class="table">
+                    <table class="table" style="width: 80%;">
                         <thead>
-                            <tr>
+                            <tr style="background-color: darkblue; color: white;">
                                 <th scope="col">Total Read Books</th>
                                 <th scope="col">Total Bought Books</th>
                                 <th scope="col">Total Currently Issued Books</th>
@@ -19,7 +19,7 @@ const AdminStats = {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
+                            <tr style="background-color: #5B9FC8; color: black; font-weight: 500;">
                                 <th scope="row">{{readBooks}}</th>
                                 <td>{{boughtBooks}}</td>
                                 <td>{{currentlyIssuedBooks}}</td>

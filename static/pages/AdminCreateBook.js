@@ -6,8 +6,9 @@ const AdminCreateBook = {
     template : `
         <div>
             <AdminNavbar/>
-                <h3>Create a Book</h3>
-                <form>
+            <center>
+                <h3 style="font-family: Arial, sans-serif; color: darkblue; font-weight: bold; margin-top: 2px; text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);">Create a Book</h3>
+                <form style="width: 50%; margin-bottom: 20px; shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); background-color: #5B9FC8; padding: 20px;">
                     <div class="form-group">
                         <label for="book-name">Book Name</label>
                         <input v-model="bookName" type="text" class="form-control" id="book-name" aria-describedby="emailHelp" placeholder="Enter Book Name" required>
@@ -39,8 +40,9 @@ const AdminCreateBook = {
                         <label for="book-price">Book Price(₹)</label>
                         <input v-model="bookPrice" type="number" class="form-control" id="book-price" placeholder="Enter Book Price" required>
                     </div>
-                    <button @click="addBook()" type="submit" class="btn btn-primary">Add</button>
+                    <button @click="addBook()" type="submit" class="btn btn-primary" style="font-weight: 500;">Add</button>
                 </form>
+            </center>
         </div>
     `,
 

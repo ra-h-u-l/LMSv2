@@ -3,12 +3,12 @@ import views
 from extensions import db, security, cache
 import create_initial_data
 import resources
+# caching ======================================================================================
 from flask_caching import Cache
+# celery ======================================================================================
 from worker import celery_init_app
-# import flask_excel as excel
 from tasks import daily_reminder, monthly_activity_report
 from celery.schedules import crontab
-# from models import *
 
 celery_app = None
 
@@ -75,5 +75,4 @@ def setup_periodic_tasks(sender, **kwargs):
     )
 
 if __name__ == "__main__":
-    # app = create_app()
     app.run(debug=True)

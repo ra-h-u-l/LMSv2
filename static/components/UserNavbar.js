@@ -28,8 +28,8 @@ const UserNavbar = {
                         </li>
                     </ul>
                     <form class="d-flex" role="search">
-                        <input v-model="keyword" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                        <button @click="search()" class="btn btn-outline-success" type="submit">Search</button>
+                        <input v-model="keyword" class="form-control me-2" type="search" placeholder="Search" aria-label="Search" style="margin-right: 5px; margin-left: 150px;">
+                        <button @click="search()" class="btn btn-outline-success" type="submit" style="font-weight: 500; margin-right: 350px;">Search</button>
                     </form>
                     <button @click="userLogout()" class="btn btn-outline-danger" type="submit">Logout</button>
                 </div>

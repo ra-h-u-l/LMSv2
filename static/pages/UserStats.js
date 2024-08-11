@@ -7,16 +7,16 @@ const UserStats = {
         <div>
             <UserNavbar/>
             <center>
-                <h3>Stats</h3>
-                <table class="table">
+                <h3 style="font-family: Arial, sans-serif; color: darkblue; font-weight: bold; margin-top: 2px; text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);">Stats</h3>
+                <table class="table" style="width: 70%;">
                     <thead>
-                        <tr>
+                        <tr style="background-color: darkblue; color: white;">
                             <th scope="col">Total Read Books</th>
                             <th scope="col">Total Bought Books</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
+                        <tr style="background-color: #5B9FC8; color: black; font-weight: 500;">
                             <td>{{readBooks}}</td>
                             <td>{{boughtBooks}}</td>
                         </tr>

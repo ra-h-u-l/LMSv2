@@ -6,8 +6,9 @@ const AdminUpdateSection = {
     template : `
         <div>
             <AdminNavbar/>
-                <h3>Update Section</h3>
-                <form>
+            <center>
+                <h3 style="font-family: Arial, sans-serif; color: darkblue; font-weight: bold; margin-top: 2px; text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);">Update Section</h3>
+                <form style="width: 50%; margin-bottom: 20px; shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); background-color: #5B9FC8; padding: 20px;">
                     <div class="form-group">
                         <label for="section-name">Section Name</label>
                         <input v-model="sectionName" type="text" class="form-control" id="section-name" aria-describedby="emailHelp" placeholder=sectionDescription>
@@ -18,6 +19,7 @@ const AdminUpdateSection = {
                     </div>
                     <button @click="updateSection()" type="submit" class="btn btn-primary">Update</button>
                 </form>
+            </center>
         </div>
     `,
 

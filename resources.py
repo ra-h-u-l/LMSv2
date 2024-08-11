@@ -20,7 +20,7 @@ parser.add_argument("total_copies", type = int)
 parser.add_argument("book_price", type = int)
 
 
-# Sections API
+# Sections API ================================================================================================
 class SectionsApi(Resource):
     @auth_required("token")
     @roles_accepted("admin", "user")
@@ -83,7 +83,7 @@ class SectionsApi(Resource):
         return {"message": "Section deleted successfully"}, 200
 
 
-# Books API
+# Books API ================================================================================================
 class BooksApi(Resource):
     @auth_required("token")
     @roles_accepted("admin", "user")
@@ -173,12 +173,28 @@ class BooksApi(Resource):
         history = UserBookHistory.query.filter_by(book_id = data["id"]).all()
         if history:
             return {"message": "Book can't be deleted as it has user history"}, 400
+
+        requested = RequestedBooks.query.filter_by(book_id = data["id"]).all()
+        if requested:
+            return {"message": "Book can't be deleted as it has user requests"}, 400
+
+        current = CurrentlyIssuedBooks.query.filter_by(book_id = data["id"]).all()
+        if current:
+            return {"message": "Book can't be deleted as it is currently issued"}, 400
+
+        sold = SoldBooks.query.filter_by(book_id = data["id"]).all()
+        if sold:
+            return {"message": "Book can't be deleted as it is sold"}, 400
+
+        rated = BookRating.query.filter_by(book_id = data["id"]).all()
+        if rated:
+            return {"message": "Book can't be deleted as it is rated"}, 400
             
         db.session.delete(book)
         db.session.commit()
         return {"message": "Book deleted successfully"}, 200
 
 
-# API endpoints
+# API endpoints ====================================================================================================
 api.add_resource(SectionsApi, "/api/sections")
 api.add_resource(BooksApi, "/api/books")

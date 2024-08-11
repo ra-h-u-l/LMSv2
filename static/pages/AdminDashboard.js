@@ -7,11 +7,11 @@ const AdminDashboard = {
         <div>
             <AdminNavbar/>
             <center>
-                <h3 style="background-color: lightgreen; margin: 2px">Requested Books</h3>
+                <h3 style="font-family: Arial, sans-serif; color: darkblue; font-weight: bold; margin-top: 2px; text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);">Requested Books</h3>
                 <h4 v-if="!requestList">No Requests</h4>
-                <table v-if="requestList" class="table">
+                <table v-if="requestList" class="table" style="width: 90%;">
                         <thead>
-                            <tr style="background-color: lightblue; margin: 2px">
+                            <tr style="background-color: darkblue; color: white;">
                                 <th scope="col">S. No.</th>
                                 <th scope="col">User</th>
                                 <th scope="col">Book Name</th>
@@ -21,24 +21,24 @@ const AdminDashboard = {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(book, index) in requestList">
+                            <tr v-for="(book, index) in requestList" style="background-color: #5B9FC8; color: black; font-weight: 500;">
                                 <th scope="row">{{index + 1}}</th>
                                 <td >{{book.user_name}}</td>
                                 <td >{{book.book_name}}</td>
                                 <td >{{book.date_requested}}</td>
-                                <td><button @click="grantBook(book)" type="button" class="btn btn-success">Grant</button></td>
-                                <td><button @click="cancelRequest(book)" type="button" class="btn btn-danger">Cancel Request</button></td>
+                                <td><button @click="grantBook(book)" type="button" class="btn btn-success" style="font-weight: 500;">Grant</button></td>
+                                <td><button @click="cancelRequest(book)" type="button" class="btn btn-danger" style="font-weight: 500;">Cancel Request</button></td>
                             </tr>
                         </tbody>
                     </table>
 
                     <br>
 
-                    <h3 style="background-color: lightgreen; margin: 2px">Issued Books</h3>
+                    <h3 style="font-family: Arial, sans-serif; color: darkblue; font-weight: bold; margin-top: 2px; text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);">Issued Books</h3>
                     <h4 v-if="!issueList">No Requests</h4>
-                    <table v-if="issueList" class="table">
+                    <table v-if="issueList" class="table" style="width: 90%;">
                             <thead>
-                                <tr style="background-color: lightblue; margin: 2px">
+                                <tr style="background-color: darkblue; color: white;">
                                     <th scope="col">S. No.</th>
                                     <th scope="col">User</th>
                                     <th scope="col">Book Name</th>
@@ -48,13 +48,13 @@ const AdminDashboard = {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="(book, index) in issueList">
+                                <tr v-for="(book, index) in issueList" style="background-color: #5B9FC8; color: black; font-weight: 500;">
                                     <th scope="row">{{index + 1}}</th>
                                     <td >{{book.user_name}}</td>
                                     <td >{{book.book_name}}</td>
                                     <td >{{book.date_requested}}</td>
                                     <td >{{book.date_issued}}</td>
-                                    <td><button @click="revokeBook(book)" type="button" class="btn btn-danger">Revoke/Take Back</button></td>
+                                    <td><button @click="revokeBook(book)" type="button" class="btn btn-danger" style="font-weight: 500;">Revoke/Take Back</button></td>
                                 </tr>
                             </tbody>
                         </table>

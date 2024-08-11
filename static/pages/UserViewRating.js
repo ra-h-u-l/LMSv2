@@ -7,14 +7,14 @@ const UserViewRating = {
         <div>
             <UserNavbar/>
             <center>
-                <h3>Ratings</h3>
-                <div card style="width: 30%; background-color: white">
+                <h3 style="font-family: Arial, sans-serif; color: darkblue; font-weight: bold; margin-top: 2px; text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);">Ratings</h3>
+                <div card style="width: 30%; background-color: lightblue; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
                     <div v-for="rating in ratingData" class="card-body">                        
                         <h5 class="card-title">Book Name: {{rating.book_name}}</h5>
                         <p class="card-text">Rated: {{rating.rating}}</p>
                         <p class="card-text">Rated By: {{rating.fullName}}</p>
                         <p class="card-text">Date: {{rating.date_rated}}</p>
-                        <textarea name="" id="" cols="70" rows="10" readonly>{{rating.review}}</textarea>
+                        <textarea name="" id="" cols=50% rows=7% readonly>{{rating.review}}</textarea>
                     </div>
                 </div>
             </center>

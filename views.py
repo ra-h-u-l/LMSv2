@@ -2,7 +2,6 @@ from flask import render_template_string, render_template, jsonify, request, sen
 from flask_security import auth_required, current_user, roles_required, roles_accepted, SQLAlchemyUserDatastore
 from extensions import db, security
 from flask_security.utils import hash_password, verify_password
-# from models import User, Role
 from models import *
 from datetime import datetime, timedelta
 from fpdf import FPDF
@@ -12,7 +11,7 @@ from tasks import add, create_csv_report
 userDatastore = SQLAlchemyUserDatastore(db, User, Role)
 
 def create_views(app):
-    # celery
+    # celery (for demo) - backend jobs ==============================================================
     @app.route("/celerydemo")
     def celery_demo():
         task = add.delay(10, 20)
@@ -27,7 +26,7 @@ def create_views(app):
         else:
             return "task not ready", 405
 
-    # generate report
+    # generate report (actual backend jobs) ============================================================
     @app.route("/admingeneratereport", methods=["GET"])
     @auth_required("token")
     @roles_required("admin")
@@ -44,19 +43,18 @@ def create_views(app):
         result = AsyncResult(task_id)
 
         if result.ready():
-            # return send_file(result.result, as_attachment=True)
             return send_file("./downloads/report.csv", as_attachment=True), 200
         else:
             return jsonify({"result": "File is not ready for download. Please wait."}), 405
 
 
 
-    # homepage
+    # homepage =======================================================================================
     @app.route("/")
     def home():
         return render_template("index.html")
 
-    # admin login
+    # admin login ====================================================================================
     @app.route("/adminlogin", methods=["POST"])
     def adminLogin():
         data = request.get_json()
@@ -80,14 +78,14 @@ def create_views(app):
         else:
             return jsonify({"error": "Icorrect password"}), 401
 
-    # admin dashboard
+    # admin dashboard ================================================================================
     @app.route("/admindashboard", methods=["GET", "POST"])
     @auth_required("token")
     @roles_required("admin")
     def adminDashboard():
         return jsonify({"message": "Admin Dashboard"}), 200
 
-    # particular section books
+    # particular section books ========================================================================
     @app.route("/sectionbooks", methods=["POST"])
     @auth_required("token")
     @roles_accepted("admin", "user")
@@ -122,7 +120,7 @@ def create_views(app):
 
         return book_data, 200
 
-    # admin grant book request
+    # admin grant book request ========================================================================
     @app.route("/grantbook", methods=["POST"])
     @auth_required("token")
     @roles_required("admin")
@@ -165,7 +163,7 @@ def create_views(app):
 
             return jsonify({"message": "Book issued/granted successfully"}), 200
 
-    # currently issued books
+    # currently issued books ===========================================================================
     @app.route("/currentlyissuedbooks", methods=["GET"])
     @auth_required("token")
     @roles_accepted("admin", "user")
@@ -186,7 +184,7 @@ def create_views(app):
 
         return book_data, 200
 
-    # admin cancel book request
+    # admin cancel book request =======================================================================
     @app.route("/cancelbookrequest", methods=["POST"])
     @auth_required("token")
     @roles_required("admin")
@@ -210,7 +208,7 @@ def create_views(app):
             return jsonify({"message": "Book request canceled successfully"}), 200
 
 
-    # user signup
+    # user signup =======================================================================
     @app.route("/usersignup", methods=["POST"])
     def userSignup():
         data = request.get_json()
@@ -237,7 +235,7 @@ def create_views(app):
 
             return jsonify({"message": "User created successfully"}), 201
 
-    # user login
+    # user login ======================================================================
     @app.route("/userlogin", methods=["POST"])
     def userLogin():
         data = request.get_json()
@@ -262,14 +260,14 @@ def create_views(app):
             return jsonify({"error": "Icorrect password"}), 401
 
 
-    # user dashboard
+    # user dashboard ===================================================================
     @app.route("/userdashboard", methods=["GET", "POST"])
     @auth_required("token")
     @roles_required("user")
     def userDashboard():
         return jsonify({"message": "User Dashboard"}), 200
 
-    # user borrow book
+    # user borrow book =================================================================
     @app.route("/userborrowbook", methods=["GET","POST"])
     @auth_required("token")
     @roles_accepted("admin", "user")
@@ -317,7 +315,7 @@ def create_views(app):
             db.session.commit()
             return jsonify({"message": "Book requested successfully"}), 201
 
-    # user read book
+    # user read book ===================================================================
     @app.route("/userreadbook", methods=["POST"])
     @auth_required("token")
     @roles_accepted("user")
@@ -347,7 +345,7 @@ def create_views(app):
 
             return book_info, 200
 
-    # return book
+    # return book ======================================================================
     @app.route("/returnbook", methods=["POST"])
     @auth_required("token")
     @roles_accepted("user", "admin")
@@ -377,7 +375,7 @@ def create_views(app):
             db.session.commit()
             return jsonify({"message": "Book returned successfully"}), 200
 
-    # book issued history
+    # book issued history ==============================================================
     @app.route("/bookissuedhistory", methods=["GET", "POST"])
     @auth_required("token")
     @roles_accepted("user", "admin")
@@ -450,7 +448,7 @@ def create_views(app):
 
             return historyList, 200
 
-    # rate book
+    # rate book ============================================================
     @app.route("/ratebook", methods=["POST"])
     @auth_required("token")
     @roles_accepted("user")
@@ -508,7 +506,7 @@ def create_views(app):
                                                     UserBookHistory.book_id, UserBookHistory.user_id
                                                 ).distinct().subquery()
         
-        # Count the number of rows in the subquery
+            # Count the number of rows in the subquery
             readBooks = db.session.query(func.count()).select_from(distinct_subquery).scalar()
         
             boughtBooks = SoldBooks.query.count()
@@ -534,7 +532,7 @@ def create_views(app):
 
 
 
-    # search
+    # search ================================================================================================
     @app.route("/search", methods=["POST"])
     @auth_required("token")
     @roles_accepted("admin", "user")
@@ -569,7 +567,7 @@ def create_views(app):
 
             return finalResults, 200
 
-    # buy book
+    # buy book ================================================================================================
     @app.route("/buybook", methods=["POST"])
     @auth_required("token")
     @roles_accepted("user")
@@ -616,7 +614,7 @@ def create_views(app):
 
             return jsonify({"message": "Book bought successfully"}), 200
 
-    # sold books
+    # sold books ==============================================================================================
     @app.route("/soldbooks", methods=["GET", "POST"])
     @auth_required("token")
     @roles_accepted("admin", "user")
@@ -686,7 +684,7 @@ def create_views(app):
 
             return boughtBooks, 200
 
-    # download book
+    # download book =============================================================================================
     @app.route("/downloadbook", methods=["POST"])
     @auth_required("token")
     @roles_accepted("user")
@@ -727,7 +725,7 @@ def create_views(app):
             
             return send_file(file_path, as_attachment=True), 200
 
-    # view rating
+    # view rating ===============================================================================================
     @app.route("/viewrating", methods=["GET", "POST"])
     @auth_required("token")
     @roles_accepted("admin", "user")

@@ -8,7 +8,7 @@ const AdminLogin = {
             <Navbar/>
             <div id="login-signup">
                 <h3>Admin Login</h3>
-                <form>
+                <form >
                     <div class="form-group">
                         <label for="exampleInputEmail1">Email address</label>
                         <input v-model="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">

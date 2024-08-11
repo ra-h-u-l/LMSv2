@@ -7,11 +7,11 @@ const AdminAllBooks = {
         <div>
             <AdminNavbar/>
             <center>
-                <h3>All Books</h3>
-                <div>
+                <h3 style="font-family: Arial, sans-serif; color: darkblue; font-weight: bold; margin-top: 2px; text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);">All Books</h3>
+                <div style="width: 98%;">
                     <table class="table">
                         <thead>
-                            <tr>
+                            <tr style="background-color: darkblue; color: white;">
                                 <th scope="col">S. No.</th>
                                 <th scope="col">Book Name</th>
                                 <th scope="col">Section Name</th>
@@ -32,10 +32,10 @@ const AdminAllBooks = {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(book, index) in allBooks">
+                            <tr v-for="(book, index) in allBooks" style="background-color: #5B9FC8; color: black; font-weight: 500;">
                                 <th scope="row">{{index + 1}}</th>
                                 <td >{{book.book_name}}</td>
-                                <td ><button @click="viewSection(book.section_id)" style="background-color: transparent; border: none;">{{book.section_name}}</button></td>
+                                <td ><button @click="viewSection(book.section_id)" style="background-color: transparent; border: none; font-weight: 500;">{{book.section_name}}</button></td>
                                 <td>{{book.description}}</td>
                                 <td>{{book.date_created}}</td>
                                 <td>{{book.last_updated}}</td>
@@ -46,10 +46,10 @@ const AdminAllBooks = {
                                 <td>{{book.sold_copies}}</td>
                                 <td>₹ {{book.book_price}}</td>
                                 <td>{{book.rating}}</td>
-                                <td><button @click="viewRating(book)" type="button" class="btn btn-primary">View Ratings</button></td>
-                                <td><button @click="readBook(book)" type="button" class="btn btn-primary">Read</button></td>
-                                <td><button @click="updateBook(book)" type="button" class="btn btn-warning">Update</button></td>
-                                <td><button @click="deleteBook(book)" type="button" class="btn btn-danger">Delete</button></td>
+                                <td><button @click="viewRating(book)" type="button" class="btn btn-primary" style="font-weight: 500;">View Ratings</button></td>
+                                <td><button @click="readBook(book)" type="button" class="btn btn-primary" style="font-weight: 500;">Read</button></td>
+                                <td><button @click="updateBook(book)" type="button" class="btn btn-warning" style="font-weight: 500;">Update</button></td>
+                                <td><button @click="deleteBook(book)" type="button" class="btn btn-danger" style="font-weight: 500;">Delete</button></td>
                             </tr>
                         </tbody>
                     </table>

@@ -7,12 +7,12 @@ const UserPaymentPage = {
         <div>
             <UserNavbar/>
             <center>
-                <h3>Payment Page</h3>
+                <h3 style="font-family: Arial, sans-serif; color: darkblue; font-weight: bold; margin-top: 2px; text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5); margin-top: 3%;">Payment Page</h3>
                 <div class="card" style="width: 35%;">
-                    <div class="card-body">
+                    <div class="card-body" style="background-color: #5B9FC8; color: black; font-weight: 500;">
                         <h5 class="card-title">Book Name: {{book_name}}</h5>
-                        <p class="card-text">Amount: ₹ {{amount}}</p>
-                        <button @click="pay" type="button" class="btn btn-primary">Pay</button>
+                        <p class="card-text" style="font-weight: 500;">Amount: ₹ {{amount}}</p>
+                        <button @click="pay" type="button" class="btn btn-primary" style="font-weight: 500;">Pay</button>
                     </div>
                 </div>
             </center>

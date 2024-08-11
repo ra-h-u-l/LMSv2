@@ -7,11 +7,11 @@ const AdminSoldBooks = {
         <div>
             <AdminNavbar/>
             <center>
-                <h3>Sold Books</h3>
+                <h3 style="font-family: Arial, sans-serif; color: darkblue; font-weight: bold; margin-top: 2px; text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);">Sold Books</h3>
                 <div>
-                    <table class="table">
+                    <table class="table" style="width: 98%;">
                         <thead>
-                            <tr>
+                            <tr style="background-color: darkblue; color: white;">
                                 <th scope="col">S. No.</th>
                                 <th scope="col">User</th>
                                 <th scope="col">Book Name</th>
@@ -21,7 +21,7 @@ const AdminSoldBooks = {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(book, index) in soldBooks">
+                            <tr v-for="(book, index) in soldBooks" style="background-color: #5B9FC8; color: black; font-weight: 500;">
                                 <th scope="row">{{index + 1}}</th>
                                 <td >{{book.fullName}}</td>
                                 <td >{{book.book_name}}</td>

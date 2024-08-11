@@ -51,7 +51,7 @@ const routes = [
     {path: "/adminparticularsectionbooks", component : AdminParticularSectionBooks},
     {path: "/adminbookhistory", component : AdminBookHistory},
     {path: "/adminsearchresults", component : AdminSearchResuslts},
-    {path: "/soldbookhistory", component : AdminSoldBooks},
+    {path: "/adminsoldbookhistory", component : AdminSoldBooks},
     {path: "/adminstats", component : AdminStats},
     {path: "/adminviewrating", component : AdminViewRating},
     {path: "/admindownloadreport", component : AdminDownloadReport},

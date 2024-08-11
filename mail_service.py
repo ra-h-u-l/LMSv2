@@ -19,5 +19,3 @@ def send_email(to, subject, content_body):
     client = smtplib.SMTP(host=SMTP_SERVER, port=SMTP_PORT)
     client.send_message(msg=msg)
     client.quit()
-
-# send_email('user1@gmail.com', 'This is subject', '<h1> This is body </h1>')
