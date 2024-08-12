@@ -18,7 +18,7 @@ const UserSignup = {
                     </div>
                     <div class="form-group">
                         <label for="exampleInputPassword1">Password</label>
-                        <input v-model="password" type="password" class="form-control" id="password" placeholder="Password" required>
+                        <input v-model="password" type="password" class="form-control" id="password" placeholder="Password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,}">
                     </div>
                     <button @click="signupData()" type="submit" class="btn btn-primary">Signup</button>
                 </form>

@@ -64,7 +64,7 @@ def daily_reminder():
     for record in currently_issued_books:
         time_difference = (current_time - record.date_issued).total_seconds()
 
-        if time_difference > 50:        # 6 days = 518400 seconds
+        if time_difference > 518400:        # 6 days = 518400 seconds
             user = User.query.get(record.user_id)
             book = Books.query.get(record.book_id)
 

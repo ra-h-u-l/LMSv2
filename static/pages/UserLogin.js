@@ -11,11 +11,11 @@ const UserLogin = {
                 <form>
                     <div class="form-group">
                         <label for="exampleInputEmail1">Email address</label>
-                        <input v-model="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+                        <input v-model="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" required>
                     </div>
                     <div class="form-group">
                         <label for="exampleInputPassword1">Password</label>
-                        <input v-model="password" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                        <input v-model="password" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,}">
                     </div>
                     <button @click="userLogin()" type="submit" class="btn btn-primary">Login</button>
                 </form>

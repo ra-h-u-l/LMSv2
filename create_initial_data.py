@@ -12,7 +12,7 @@ def create_data(user_datastore):
         user_datastore.create_user(
             fullName="Rahul Kumar",
             email="admin@gmail.com",
-            password=hash_password("123"),
+            password=hash_password("Pass@123"),
             type="admin",
             active=True,
             roles=[admin_role]
@@ -22,7 +22,7 @@ def create_data(user_datastore):
         user_datastore.create_user(
             fullName="Ravi Kumar",
             email="user1@gmail.com",
-            password=hash_password("123"),
+            password=hash_password("Pass@123"),
             active=True,
             roles=[user_role]
         )
