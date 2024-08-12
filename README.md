@@ -1,5 +1,10 @@
 # Library Management System - V2
 
+## Introduction
+
+Welcome to the **Library Management System (LMS) - V2**. This application is designed to streamline library operations, offering a comprehensive solution for managing books, sections, users, and more. This guide will walk you through the steps required to set up and run the LMS on a Linux-based system or environment.
+
+
 - Steps to run the application in linux based system/environment
     1. Install redis-server globally [sudo apt install redis-server]
     2. Create virtual environment [python3 -m venv env_name]
