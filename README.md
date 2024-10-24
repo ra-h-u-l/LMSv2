@@ -28,5 +28,3 @@ Welcome to the **Library Management System (LMS) - V2**. This application is des
         
 
 - Database will be created automatically after running the application with one admin and one user credentials
-    - Admin [Email: admin@gmail.com, Password: Pass@123]
-    - User [Email: user1@gmail.com, Password: Pass@123]
